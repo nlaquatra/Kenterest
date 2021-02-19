@@ -1,3 +1,35 @@
+<?php
+   include("Config.php");
+   session_start();
+   
+   if($_SERVER["REQUEST_METHOD"] == "POST") {
+      // username and password sent from form 
+      
+      $myusername = mysqli_real_escape_string($db,$_POST['username']);
+      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
+      
+      $sql = "SELECT username FROM user_info WHERE username = '$myusername' and pass = '$mypassword'";
+      $result = mysqli_query($db,$sql);
+      if($result === false){
+        throw new Exception(mysqli_error($db));
+    }
+      $row = mysqli_fetch_array($result, MYSQLI_ASSOC);
+      $active = $row['active'];
+      
+      $count = mysqli_num_rows($result);
+      
+      // If result matched $myusername and $mypassword, table row must be 1 row
+		
+      if($count == 1) {
+         //session_register("$myusername");
+         $_SESSION['login_user'] = $myusername;
+         
+         header("location: welcome.php");
+      }else {
+         $error = "Your Login Name or Password is invalid";
+      }
+   }
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,13 +46,14 @@
 <body class="text-center">
     
     <main class="form-signin">
-      <form>
+      <form action = "" method = "post">
         <img class="mb-4" src="img/logo.png" alt="" width="72" height="57">
         <h1 class="h3 mb-3 fw-normal">Sign into Kenterest</h1>
         <label for="inputEmail" class="visually-hidden">Kent Email</label>
-        <input type="email" id="inputEmail" class="form-control" placeholder="Kent Email" required autofocus>
+        <!-- change type="email" for required @ symbol in login form -->
+        <input type="text" name="username" class="form-control" placeholder="Kent Email" required autofocus>
         <label for="inputPassword" class="visually-hidden">Password</label>
-        <input type="password" id="inputPassword" class="form-control" placeholder="Password" required>
+        <input type="password" name="password" class="form-control" placeholder="Password" required>
         <div class="checkbox mb-3">
           <label>
             <input type="checkbox" value="remember-me"> Remember me
