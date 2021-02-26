@@ -34,19 +34,19 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Prepare a select statement
         $sql = "SELECT id FROM users WHERE email = ?";
         
-        if($stmt = $mysqli->prepare($db,$sql)){
+        if($stmt = $mysqli_prepare($db,$sql)){
             // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("s", $param_email);
+            mysqli_stmt_bind_param($stmt, "s", $param_email);
             
             // Set parameters
             $param_email = trim($_POST["email"]);
             
             // Attempt to execute the prepared statement
-            if($stmt->execute()){
+            if(mysqli_stmt_execute($stmt)){
                 // store result
-                $stmt->store_result();
+                mysqli_stmt_store_result($stmt);
                 
-                if($stmt->num_rows == 1){
+                if(mysqli_stmt_num_rows($stmt) == 1){
                     $email_err = "This email is already exsists!";
                 } else{
                     $email = trim($_POST["email"]);
@@ -56,7 +56,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }
 
             // Close statement
-            $stmt->close();
+            mysqli_stmt_close($stmt);
         }
     }
     
@@ -85,16 +85,16 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         // Prepare an insert statement
         $sql = "INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
          
-        if($stmt = $mysqli->prepare($db,$sql)){
+        if($stmt = $mysqli_prepare($db,$sql)){
             // Bind variables to the prepared statement as parameters
-            $stmt->bind_param("ssss", $firstName, $lastName, $param_email, $param_password);
+            mysqli_stmt_bind_param($stmt, "ssss", $firstName, $lastName, $param_email, $param_password);
             
             // Set parameters
             $param_email = $email;
             $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
             
             // Attempt to execute the prepared statement
-            if($stmt->execute()){
+            if(mysqli_stmt_execute($stmt)){
                 // Redirect to login page
                 header("location: login.php");
             } else{
@@ -102,12 +102,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             }
 
             // Close statement
-            $stmt->close();
+            mysqli_stmt_close($stmt);
         }
     }
     
     // Close connection
-    $mysqli->close();
+    mysqli_close($db);
 }
 ?>
 <!doctype html>
