@@ -1,114 +1,6 @@
 <?php
 // Include config file
 require_once "Config.php";
- 
-// Define variables and initialize with empty values
-$firstName = $lastName = $email = "";
-$password = $confirm_password = "";
-$email_err = $password_err = $confirm_password_err = "";
-$firstName_err = $lastName_err = "";
- 
-// Processing form data when form is submitted
-if($_SERVER["REQUEST_METHOD"] == "POST"){
-
-    //firstName
-    if (empty(trim($_POST["firstName"]))) {
-      $firstName_err = "Please enter your first name.";
-    }
-    else {
-      $firstName = trim($_POST["firstName"]);
-    }
-
-    //lastName
-    if (empty(trim($_POST["lastName"]))) {
-      $lastName_err = "Please enter your last name.";
-    }
-    else {
-      $lastName = trim($_POST["lastName"]);
-    }
- 
-    // Validate username
-    if(empty(trim($_POST["email"]))){
-        $username_err = "Please enter your Kent email.";
-    } else{
-        // Prepare a select statement
-        $sql = "SELECT id FROM users WHERE email = ?";
-        
-        if($stmt = $mysqli_prepare($db,$sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "s", $param_email);
-            
-            // Set parameters
-            $param_email = trim($_POST["email"]);
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // store result
-                mysqli_stmt_store_result($stmt);
-                
-                if(mysqli_stmt_num_rows($stmt) == 1){
-                    $email_err = "This email is already exsists!";
-                } else{
-                    $email = trim($_POST["email"]);
-                }
-            } else{
-                echo "Oops! Something went wrong. Please try again later.";
-            }
-
-            // Close statement
-            mysqli_stmt_close($stmt);
-        }
-    }
-    
-    // Validate password
-    if(empty(trim($_POST["password"]))){
-        $password_err = "Please enter a password.";     
-    } elseif(strlen(trim($_POST["password"])) < 3){
-        $password_err = "Password must have atleast 3 characters.";
-    } else{
-        $password = trim($_POST["password"]);
-    }
-    
-    // Validate confirm password
-    if(empty(trim($_POST["confirm_password"]))){
-        $confirm_password_err = "Please confirm password.";     
-    } else{
-        $confirm_password = trim($_POST["confirm_password"]);
-        if(empty($password_err) && ($password != $confirm_password)){
-            $confirm_password_err = "Password did not match.";
-        }
-    }
-    
-    // Check input errors before inserting in database
-    if(empty($firstName_err) && empty($lastName_err) && empty($email_err) && empty($password_err) && empty($confirm_password_err)){
-        
-        // Prepare an insert statement
-        $sql = "INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
-         
-        if($stmt = $mysqli_prepare($db,$sql)){
-            // Bind variables to the prepared statement as parameters
-            mysqli_stmt_bind_param($stmt, "ssss", $firstName, $lastName, $param_email, $param_password);
-            
-            // Set parameters
-            $param_email = $email;
-            $param_password = password_hash($password, PASSWORD_DEFAULT); // Creates a password hash
-            
-            // Attempt to execute the prepared statement
-            if(mysqli_stmt_execute($stmt)){
-                // Redirect to login page
-                header("location: login.php");
-            } else{
-                echo "Something went wrong. Please try again later.";
-            }
-
-            // Close statement
-            mysqli_stmt_close($stmt);
-        }
-    }
-    
-    // Close connection
-    mysqli_close($db);
-}
 ?>
 <!doctype html>
 <html lang="en">
@@ -116,11 +8,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
-    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="author" content="">
     <meta name="generator" content="Hugo 0.80.0">
-    <title>Checkout example · Bootstrap v5.0</title>
-
-    <link rel="canonical" href="https://getbootstrap.com/docs/5.0/examples/checkout/">
+    <title>Register Account</title>
 
     
 
@@ -157,10 +47,29 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
       <h2>Register Account</h2>
       <p class="lead">Fill out required information needed to register an account!</p>
     </div>
+    <?php
+      if (isset($_GET["error"])) {
+        if ($_GET["error"] === "emptyInput") {
+          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Fill in all fields</center></div>";
+        }
+        else if ($_GET["error"] === "invalidEmail") {
+          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Invalid Email</center></div>";
+        }
+        else if ($_GET["error"] === "invalidPwd") {
+          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Invalid Password Confirmation</center></div>";
+        }
+        else if ($_GET["error"] === "emailExsists") {
+          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Email already exsists!</center></div>";
+        }
+        else if ($_GET["error"] === "none") {
+          echo "<div class = \"alert alert-success\"><center><strong>Success:</strong> Account successfully created!</center></div>";
+        }
+      }
+    ?>
       <center>
       <div class="col-md-7 col-lg-8">
-        <form action = "" method = "post" class="needs-validation" novalidate>
-        <?php include('errors.php'); ?>
+        <form action = "includes/register.inc.php" method = "post" class="needs-validation" novalidate>
+        <!-- <?php  // include('errors.php'); ?> !--> 
           <div class="row g-3">
             <div class="col-sm-6">
               <label for="firstName" class="form-label">First name</label>
@@ -189,12 +98,12 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
             <div class="col-12">
               <label for="address" class="form-label">Password</label>
-              <input type="password" name="password" class="form-control" placeholder="Password" required>
+              <input type="password" name="pwd" class="form-control" placeholder="Password" required>
             </div>
 
             <div class="col-12">
               <label for="address2" class="form-label">Confirm Password</label>
-              <input type="password" class = "form-control" name = "confirm_password" placeholder="Re-enter Password">
+              <input type="password" class = "form-control" name = "confirm_pwd" placeholder="Re-enter Password">
             </div>
 
             <!-- <div class="col-12">
@@ -219,26 +128,15 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
           <hr class="my-4">
 
-          <button class="btn btn-primary btn" type="submit">Register</button>
+          <input type="submit" class = "btn btn-primary" name="submit" value="Register">
+          <a href = "login.php"><input type="button" class = "btn btn-primary" name="login" value="Login Page"></a>
         </form>
         </center>
       </div>
     </div>
   </main>
-
-  <footer class="my-5 pt-5 text-muted text-center text-small">
-    <p class="mb-1">&copy; 2017–2021 Company Name</p>
-    <ul class="list-inline">
-      <li class="list-inline-item"><a href="#">Privacy</a></li>
-      <li class="list-inline-item"><a href="#">Terms</a></li>
-      <li class="list-inline-item"><a href="#">Support</a></li>
-    </ul>
-  </footer>
-</div>
-
-
-    <script src="js/bootstrap.bundle.min.js" integrity="sha384-b5kHyXgcpbZJO/tY9Ul7kGkf1S0CWuKcCD38l8YkeH8z8QjE0GmW1gYU5S9FOnJ0" crossorigin="anonymous"></script>
-
-      <script src="form-validation.js"></script>
+<?php 
+include_once("footer.php");
+?>
   </body>
 </html>
