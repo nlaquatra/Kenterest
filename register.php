@@ -50,7 +50,7 @@ require_once "Config.php";
     <?php
       if (isset($_GET["error"])) {
         if ($_GET["error"] === "emptyInput") {
-          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Fill in all fields</center></div>";
+          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Fill in all credentials</center></div>";
         }
         else if ($_GET["error"] === "invalidEmail") {
           echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Invalid Email</center></div>";
@@ -69,7 +69,6 @@ require_once "Config.php";
       <center>
       <div class="col-md-7 col-lg-8">
         <form action = "includes/register.inc.php" method = "post" class="needs-validation" novalidate>
-        <!-- <?php  // include('errors.php'); ?> !--> 
           <div class="row g-3">
             <div class="col-sm-6">
               <label for="firstName" class="form-label">First name</label>
@@ -135,8 +134,12 @@ require_once "Config.php";
       </div>
     </div>
   </main>
-<?php 
-include_once("footer.php");
-?>
+  <footer class="my-5 pt-5 text-muted text-center text-small">
+    <p class="mb-1">&copy; 2021 Kenterest</p>
+    <ul class="list-inline">
+      <li class="list-inline-item"><a href="login.php">Login</a></li>
+      <li class="list-inline-item"><a href="register.php">Register Account</a></li>
+    </ul>
+  </footer>
   </body>
 </html>
