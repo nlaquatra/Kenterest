@@ -28,6 +28,9 @@
         else if ($_GET["error"] === "invalidLogin") {
           echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Invalid Email or Password</center></div>";
         }
+        else if ($_GET["error"] === "notLogin") {
+          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> You must login first!</center></div>";
+        }
       }
       else if (isset($_GET["logout"])) {
         if ($_GET["logout"] === "logout") {
@@ -49,10 +52,13 @@
         <a href = "register.php"><button class = "btn btn-primary" type = "button">Register Account</button></a>
       </form>
     </main>
-    <footer class="my-5 pt-5 text-muted text-center text-small">
+    <?php include_once('footer.php'); ?>
+    <!-- <footer class="my-5 pt-5 text-muted text-center text-small">
     <p class="mb-1">&copy; 2021 Kenterest</p>
     <ul class="list-inline">
       <li class="list-inline-item"><a href="login.php">Login</a></li>
       <li class="list-inline-item"><a href="register.php">Register Account</a></li>
     </ul>
-  </footer>
+  </footer> -->
+  </body>
+  </html>

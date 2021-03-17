@@ -49,7 +49,7 @@ require_once "Config.php";
     </div>
     <?php
       if (isset($_GET["error"])) {
-        if ($_GET["error"] === "emptyInput") {
+        if ($_GET["error"] === "emptyInput") { //error for no input
           echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Fill in all credentials</center></div>";
         }
         else if ($_GET["error"] === "invalidEmail") {
@@ -59,7 +59,7 @@ require_once "Config.php";
           echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Invalid Password Confirmation</center></div>";
         }
         else if ($_GET["error"] === "emailExsists") {
-          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Email already exsists!</center></div>";
+          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Email already exists!</center></div>";
         }
         else if ($_GET["error"] === "none") {
           echo "<div class = \"alert alert-success\"><center><strong>Success:</strong> Account successfully created!</center></div>";
@@ -90,9 +90,6 @@ require_once "Config.php";
             <div class="col-12">
               <label for="email" class="form-label">Email</label>
               <input type="email" class="form-control" name="email" placeholder="example@kent.edu">
-              <div class="invalid-feedback">
-                Please enter a valid email address for shipping updates.
-              </div>
             </div>
 
             <div class="col-12">

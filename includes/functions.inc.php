@@ -102,6 +102,7 @@ function loginUser($db, $email, $pwd) {
     else if ($checkPwd === true) {
         session_start();
         $_SESSION["email"] = $emailExsist["email"];
+        $_SESSION["id"] = $row["id"];
         header("location: ../index.php");
         exit();
     }
