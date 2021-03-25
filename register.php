@@ -73,17 +73,11 @@ require_once "Config.php";
             <div class="col-sm-6">
               <label for="firstName" class="form-label">First name</label>
               <input type="text" class="form-control" name="firstName" placeholder="" value="" required>
-              <div class="invalid-feedback">
-                Valid first name is required.
-              </div>
             </div>
 
             <div class="col-sm-6">
               <label for="lastName" class="form-label">Last name</label>
               <input type="text" class="form-control" name="lastName" placeholder="" value="" required>
-              <div class="invalid-feedback">
-                Valid last name is required.
-              </div>
             </div>
 
 
@@ -93,12 +87,12 @@ require_once "Config.php";
             </div>
 
             <div class="col-12">
-              <label for="address" class="form-label">Password</label>
+              <label for="pass" class="form-label">Password</label>
               <input type="password" name="pwd" class="form-control" placeholder="Password" required>
             </div>
 
             <div class="col-12">
-              <label for="address2" class="form-label">Confirm Password</label>
+              <label for="cpass" class="form-label">Confirm Password</label>
               <input type="password" class = "form-control" name = "confirm_pwd" placeholder="Re-enter Password">
             </div>
 

@@ -107,3 +107,17 @@ function loginUser($db, $email, $pwd) {
         exit();
     }
 }
+
+function createPost($db, $title, $text, $file) {
+    //session_start();
+    $sql = "INSERT INTO post (title, body, image) VALUES (?, ?, ?)";
+    $stmt = mysqli_stmt_init($db);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        //echo("Error description: " . mysqli_error($db));
+        header("location: ../post.php?error=stmtFail");
+    }
+    mysqli_stmt_bind_param($stmt, "sss", $title, $text, $file);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+    exit();
+}
