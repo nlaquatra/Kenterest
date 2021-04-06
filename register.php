@@ -95,25 +95,6 @@ require_once "Config.php";
               <label for="cpass" class="form-label">Confirm Password</label>
               <input type="password" class = "form-control" name = "confirm_pwd" placeholder="Re-enter Password">
             </div>
-
-            <!-- <div class="col-12">
-              <label for="country" class="form-label">Campus</label>
-              <select class="form-select" id="country" required>
-                <option value="">Choose...</option>
-                <option>Kent Main campus</option>
-                <option>Stark campus</option>
-                <option>Ashtabula campus</option>
-                <option>East Liverpool campus</option>
-                <option>Geauga campus</option>
-                <option>Salem campus</option>
-                <option>Trumbell campus</option>
-                <option>Tuscarawas campus</option>
-
-              </select>
-              <div class="invalid-feedback">
-                Please select a valid campus.
-              </div>
-            </div> -->
           
 
           <hr class="my-4">

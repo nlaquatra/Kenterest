@@ -2,6 +2,8 @@
 include_once("header.php");
 include_once("config.php");
 
+/*
+
 if(isset($_POST['upload'])) {
     $folder = "img/profile/".$name;
     $name = $_FILES['uploadfile']['name'];
@@ -26,6 +28,7 @@ if(isset($_POST['upload'])) {
         header("location: profile.php?uploading=uploadSucess");
     }
 }
+*/
 ?>
 
 <link href="css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -40,6 +43,12 @@ if (isset($_GET["error"])) {
     if ($_GET["error"] === "uploadError") {
       echo "<div class = \"alert alert-warning\"><center><strong>Warning:</strong> Somthing went wrong while uploading!</center></div>";
     }
+    if ($_GET["error"] === "emptyInput") {
+        echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> All fields required when editing profile!</center></div>";
+      }
+    if ($_GET["error"] === "invalidPwd") {
+        echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> The passwords do not match!</center></div>";
+    }
 }
 else if (isset($_GET["uploading"])) {
     if ($_GET["uploading"] === "uploadSucess") {
@@ -50,7 +59,6 @@ else if (isset($_GET["uploading"])) {
 ?>
 
 <div class="container emp-profile">
-            <form method="post">
                 <div class="row">
                     <div class="col-md-4">
                         <div class="profile-img">
@@ -68,7 +76,7 @@ else if (isset($_GET["uploading"])) {
                                         Welcome: <?php echo $row["firstName"]; ?>
                                     </h5>
                                     <h6>
-                                        Bio
+                                        Bio: <?php echo $row["bio"]; ?>
                                     </h6>
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item" role="presentation">
@@ -81,21 +89,53 @@ else if (isset($_GET["uploading"])) {
                         </div>
                     </div>
                     <div class="col-md-2">
-                        <input type="submit" class="profile-edit-btn" name="edit" value="Edit Profile"/>
+                        <input type="button" class="profile-edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" name="edit" value="Edit Profile"/>
                     </div>
+                    <!-- Modal -->
+<form action="includes/profile.inc.php" method="POST">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="editProfile" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editProfile">Edit Profile</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <label for="firstName" class="col-form-label">First Name:</label>
+        <input type="text" class="form-control" name="firstName">
+        <label for="lastName" class="col-form-label">Last Name:</label>
+        <input type="text" class="form-control" name="lastName">
+        <label for="bio" class="col-form-label">Bio:</label>
+        <input type="text" class="form-control" name="bio">
+        <label for="password" class="col-form-label">Password:</label>
+        <input type="password" class="form-control" name="password">
+        <label for="password2" class="col-form-label">Re-enter Password:</label>
+        <input type="password" class="form-control" name="password2">
+        <label for="pic" class="col-form-label">Profile Picture</label>
+        <br/>
+        <input type ="file" name="uploadFile" />
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <input type="submit" name="submit" class="btn btn-primary" value="Save" />
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
                 </div>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="profile-work">
                             </br>
-                            <form enctype="multipart/form-data" action="profile.php" method="POST">
+                           <!-- <form enctype="multipart/form-data" action="profile.php" method="POST">
                             <input type ="file" name="uploadfile" />
                             <input type ="submit" name="upload" value="Upload" />
-                            </form>
+                            </form> -->
                             <p>Useful Links</p>
-                            <a href="">Home</a><br/>
-                            <a href="">Post</a><br/>
-                            <a href="">Logout</a><br/>
+                            <a href="index.php">Home</a><br/>
+                            <a href="post.php">Post</a><br/>
+                            <a href="includes/logout.inc.php">Logout</a><br/>
                         </div>
                     </div>
                     <div class="col-md-8">
@@ -134,6 +174,5 @@ else if (isset($_GET["uploading"])) {
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>           
+                </div>           
         </div>

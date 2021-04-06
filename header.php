@@ -26,7 +26,7 @@ if (!isset($_SESSION["email"])) {
   <nav class="my-2 my-md-0 me-md-3">
     <a class="p-2 text-dark" href="index.php">Home</a>
     <a class="p-2 text-dark" href="profile.php">Profile</a>
-    <a class="p-2 text-dark" href="#">Post</a>
+    <a class="p-2 text-dark" href="post.php">Post</a>
   </nav>
   <a class="btn btn-outline-danger" href="includes/logout.inc.php">Logout</a>
 </header>

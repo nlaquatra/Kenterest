@@ -11,6 +11,17 @@ function emptyInputRegister($firstName, $lastName, $email, $pwd, $pwd_repeat) {
     return $result;
 }
 
+function emptyInputEdit($firstName, $lastName, $pwd, $pwd_repeat) {
+    $result; //bool return val
+    if (empty($firstName) || empty($lastName) || empty($pwd) || empty($pwd_repeat)) {
+        $result = true;
+    }
+    else {
+        $result = false;
+    }
+    return $result;
+}
+
 function invalidEmail($email) {
     $result; //bool return val
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -110,7 +121,7 @@ function loginUser($db, $email, $pwd) {
 
 function createPost($db, $title, $text, $file) {
     //session_start();
-    $sql = "INSERT INTO post (title, body, image) VALUES (?, ?, ?)";
+    $sql = "INSERT INTO posts (title, body, image) VALUES (?, ?, ?)";
     $stmt = mysqli_stmt_init($db);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         //echo("Error description: " . mysqli_error($db));
@@ -120,4 +131,24 @@ function createPost($db, $title, $text, $file) {
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     exit();
+}
+
+function editProfile($db, $firstName, $lastName, $bio, $pwd) {
+    session_start();
+    $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
+    $sql = "UPDATE users
+            SET firstName = '$firstName', lastName = '$lastName', bio = '$bio', password = '$hashedPwd'
+            WHERE email = '" .$_SESSION["email"]. "'";
+    $result = mysqli_query($db,$sql);
+    //$stmt = mysqli_stmt_init($db);
+    //if (!mysqli_stmt_prepare($stmt, $sql)) {
+        //echo("Error description: " . mysqli_error($db));
+        //header("location: ../profile.php?error=stmtFail");
+    //}
+    //$hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
+    //mysqli_stmt_bind_param($stmt, "ssss", $firstName, $lastName, $bio, $hashedPwd);
+    //mysqli_stmt_execute($stmt);
+    //mysqli_stmt_close($stmt);
+    exit();
+        
 }
