@@ -15,7 +15,7 @@ require_once "Config.php";
     
 
     <!-- Bootstrap core CSS -->
-<link href="css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BmbxuPwQa2lc/FVzBcNJ7UAyJxM6wuqIj61tLrc4wSX0szH/Ev+nYRRuWlolflfl" crossorigin="anonymous">
+<link href="css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 
 
     <style>
@@ -35,8 +35,6 @@ require_once "Config.php";
     </style>
 
     
-    <!-- Custom styles for this template -->
-    <link href="form-validation.css" rel="stylesheet">
   </head>
   <body class="bg-light">
     

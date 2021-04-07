@@ -50,10 +50,8 @@ if (isset($_GET["error"])) {
         echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> The passwords do not match!</center></div>";
     }
 }
-else if (isset($_GET["uploading"])) {
-    if ($_GET["uploading"] === "uploadSucess") {
-        echo "<div class = \"alert alert-sucess\"><center><strong>Sucess:</strong> Your file sucessfully uploaded!</center></div>";
-    }
+else if (isset($_GET["success"])) {
+    echo "<div class = \"alert alert-success\"><center><strong>Success:</strong> You have updated your info!</center></div>";
 }
 
 ?>
@@ -76,7 +74,7 @@ else if (isset($_GET["uploading"])) {
                                         Welcome: <?php echo $row["firstName"]; ?>
                                     </h5>
                                     <h6>
-                                        Bio: <?php echo $row["bio"]; ?>
+                                         <?php echo $row["bio"]; ?>
                                     </h6>
                                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                                         <li class="nav-item" role="presentation">
@@ -102,18 +100,18 @@ else if (isset($_GET["uploading"])) {
       </div>
       <div class="modal-body">
         <label for="firstName" class="col-form-label">First Name:</label>
-        <input type="text" class="form-control" name="firstName">
+        <input type="text" class="form-control" name="firstName" value="<?php echo $row['firstName']; ?>">
         <label for="lastName" class="col-form-label">Last Name:</label>
-        <input type="text" class="form-control" name="lastName">
+        <input type="text" class="form-control" name="lastName" value="<?php echo $row['lastName']; ?>">
         <label for="bio" class="col-form-label">Bio:</label>
-        <input type="text" class="form-control" name="bio">
+        <input type="text" class="form-control" name="bio" value="<?php echo $row['bio']; ?>">
         <label for="password" class="col-form-label">Password:</label>
-        <input type="password" class="form-control" name="password">
+        <input type="password" class="form-control" name="password" />
         <label for="password2" class="col-form-label">Re-enter Password:</label>
         <input type="password" class="form-control" name="password2">
         <label for="pic" class="col-form-label">Profile Picture</label>
         <br/>
-        <input type ="file" name="uploadFile" />
+        <input type ="file" class="form-control" name="uploadFile" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -142,32 +140,20 @@ else if (isset($_GET["uploading"])) {
                         <div class="tab-content profile-tab" id="myTabContent">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                         <div class="row">
-                                            <div class="col-md-6">
-                                                <label>First Name: <?php echo $row["firstName"]; ?></label>                                            </div>
-                                            <div class="col-md-6">
-                                                <p></p>
+                                            <div class="col-md-9">
+                                                <p>First Name: <?php echo $row["firstName"]; ?></p>
+                                            </div>       
+                                            <div class="col-md-9">
+                                                <p>Last Name:  <?php echo $row["lastName"]; ?></p>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Last Name: <?php echo $row["lastName"]; ?></label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p></p>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <label>Email: <?php echo $row["email"]; ?></label>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <p></p>
+                                            <div class="col-md-9">
+                                                <p>Email: <?php echo $row["email"]; ?></p>
                                             </div>
                                         </div>
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-9">
                                         <label>Your Posts</label><br/>
                                     </div>
                                 </div>

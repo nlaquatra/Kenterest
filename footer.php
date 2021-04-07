@@ -4,14 +4,14 @@
     <p class="mb-1">&copy; 2021 Kenterest</p>
     <?php 
         if (isset($_SESSION["email"])) {
-            echo "<li class=\"list-inline-item\"><a href=\"#\">Home</a></li>";
-            echo "<li class=\"list-inline-item\"><a href=\"#\">Profile</a></li>";
-            echo "<li class=\"list-inline-item\"><a href=\"#\">Post</a></li>";
+            echo "<li class=\"list-inline-item\"><a href=\"index.php\">Home</a></li>";
+            echo "<li class=\"list-inline-item\"><a href=\"profile.php\">Profile</a></li>";
+            echo "<li class=\"list-inline-item\"><a href=\"post.php\">Post</a></li>";
             echo "<li class=\"list-inline-item\"><a href=\"includes/logout.inc.php\">Logout</a></li>";
         }
         else if (!isset($_SESSION["email"])) {
-          echo "<li class=\"list-inline-item\"><a href=\"#\">Login</a></li>";
-          echo "<li class=\"list-inline-item\"><a href=\"#\">Register</a></li>";
+          echo "<li class=\"list-inline-item\"><a href=\"login.php\">Login</a></li>";
+          echo "<li class=\"list-inline-item\"><a href=\"register.php\">Register</a></li>";
         }
     ?>
   </footer>

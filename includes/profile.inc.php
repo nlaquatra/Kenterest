@@ -11,7 +11,7 @@ if (isset($_POST["submit"])) {
 
     require_once("functions.inc.php");
 
-    if (emptyInputEdit($firstName, $lastName, $pwd, $pwd_repeat) !== false) {
+    if (emptyInputEdit($firstName, $lastName) !== false) {
         header("location: ../profile.php?error=emptyInput");
         exit();
     }
@@ -19,5 +19,10 @@ if (isset($_POST["submit"])) {
         header("location: ../profile.php?error=invalidPwd");
         exit();
     }
-    editProfile($db, $firstName, $lastName, $bio, $pwd);
+    if (empty($pwd) && empty($pwd_repeat)) {
+        editProfile($db, $firstName, $lastName, $bio);
+    }
+    else {
+        editProfilePwd($db, $firstName, $lastName, $bio, $pwd);
+    }
 }

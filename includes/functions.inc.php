@@ -11,9 +11,9 @@ function emptyInputRegister($firstName, $lastName, $email, $pwd, $pwd_repeat) {
     return $result;
 }
 
-function emptyInputEdit($firstName, $lastName, $pwd, $pwd_repeat) {
+function emptyInputEdit($firstName, $lastName) {
     $result; //bool return val
-    if (empty($firstName) || empty($lastName) || empty($pwd) || empty($pwd_repeat)) {
+    if (empty($firstName) || empty($lastName)) {
         $result = true;
     }
     else {
@@ -133,7 +133,17 @@ function createPost($db, $title, $text, $file) {
     exit();
 }
 
-function editProfile($db, $firstName, $lastName, $bio, $pwd) {
+function editProfile($db, $firstName, $lastName, $bio) {
+    session_start();
+    $sql = "UPDATE users
+            SET firstName = '$firstName', lastName = '$lastName', bio = '$bio'
+            WHERE email = '" .$_SESSION["email"]. "'";
+    $result = mysqli_query($db,$sql);
+    header("location: ../profile.php?success");  
+    exit();      
+}
+
+function editProfilePwd($db, $firstName, $lastName, $bio, $pwd) {
     session_start();
     $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
     $sql = "UPDATE users
@@ -149,6 +159,6 @@ function editProfile($db, $firstName, $lastName, $bio, $pwd) {
     //mysqli_stmt_bind_param($stmt, "ssss", $firstName, $lastName, $bio, $hashedPwd);
     //mysqli_stmt_execute($stmt);
     //mysqli_stmt_close($stmt);
-    exit();
-        
+    header("location: ../profile.php?success");
+    exit();        
 }
