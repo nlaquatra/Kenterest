@@ -36,7 +36,21 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+   <!-- Put these inside the HEAD tag -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel='stylesheet' href='bower_components/glyphicons-only-bootstrap/css/bootstrap.min.css' />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <link rel="preconnect" href="https://fonts.gstatic.com">
+      <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
 <title>Image Upload</title>
+
 <style type="text/css">
    #content{
    	width: 50%;
@@ -68,43 +82,45 @@
    	height: 140px;
    }
 </style>
-</head>
+
 <body>
 <div id="content">
   <?php
     while ($row = mysqli_fetch_array($result)) {
       echo "<div id='img_div'>";
       echo "<p>".$row['title']."</p>";
-      echo "<p>".$row['parent']."</p>";
-      	echo "<img src='images/".$row['image']."' >";
-      	echo "<p>".$row['image_text']."</p>";
-        echo "<p>Likes: ".$row['likes']."</p>";
+      // echo "<p>".$row['parent']."</p>";
+      // 	echo "<img src='images/".$row['image']."' >";
+      // 	echo "<p>".$row['image_text']."</p>";
+      //   echo "<p>Likes: ".$row['likes']."</p>";
       echo "</div>";
     }
   ?>
   <form method="POST" action="WCselect_interest.php" enctype="multipart/form-data">
-  	<input type="hidden" name="size" value="100000000000">
-  	<div>
-  	  <input type="file" name="image">
-  	</div>
-    <div>
-      title: <input type="text" name="title">
+    <input type="hidden" class="form-control" name="size" value="100000000000">
+
+    <div class="form-group">
+      <center><input type="file" name="image" ></center>
     </div>
-    <div>
-      parent: <input type="text" name="parent">
+    <div class="form-group">
+      Interest Title: <input type="text" class="form-control" name="title">
     </div>
-  	<div>
+    <div class="form-group">
+      Category: <input type="text" class="form-control" name="parent">
+    </div>
+    <div class="form-group">
       <textarea 
-      	id="text" 
-      	cols="40" 
-      	rows="4" 
-      	name="image_text" 
-      	placeholder="Say something about this image..."></textarea>
-  	</div>
+        id="text" 
+        cols="40" 
+        rows="4" 
+        class="form-control"
+        name="image_text" 
+        placeholder="Say something about this Interest..."></textarea>
+    </div>
    
-  	<div>
-  		<button type="submit" name="upload">POST</button>
-  	</div>
+    <div class="form-group">
+      <button type="submit" class="btn btn-danger form-control" name="upload">Post New Interest</button>
+    </div>
   </form>
 </div>
 

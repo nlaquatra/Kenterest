@@ -1,0 +1,35 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+	<title>Question Five Form</title>
+</head>
+<body>
+	<?php include 'process.php' ?>
+<form action='' method='post'>
+<label for="name">Name:</label>
+	<input type="text" id="name" name="name">
+<br>
+<label for="name">Province:</label>
+	<select id="province">
+	  <option value="AB">AB</option>
+	  <option value="BC">BC</option>
+	  <option value="SK">SK</option>
+	</select>
+<br>
+
+<label for="name">Rating:</label>
+	<input type="radio" name="rating" value="1"> 1
+	<input type="radio" name="rating" value="2"> 2
+	<input type="radio" name="rating" value="3"> 3
+	<input type="radio" name="rating" value="4"> 4
+	<input type="radio" name="rating" value="5"> 5
+
+
+<input type='submit' value='Post' />
+</form>
+
+
+</body>
+</html>

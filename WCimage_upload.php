@@ -7,7 +7,7 @@
 </head>
 
 <?php
-  require_once('configK.php');
+  require_once('config.php');
   $dbh = new PDO(DBCONNSTRING,DBUSER,DBPASS);
   if(isset($_POST['btn'])) {
     $name = $_FILES['myfile']['name'];

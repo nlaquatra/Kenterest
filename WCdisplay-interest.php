@@ -1,10 +1,6 @@
 <?php
 if(isset($_POST["submit"])) {
   $interest_array= $_POST["interest"];
-  echo $newvalues= implode(";", $interest_array);
-  include_once 'checkboxClass.php';
-  $checkboxClass= new checkboxClass();
-  echo $checkboxClass->addtoDatabase($newvalues);
 }
 ?>
 <!DOCTYPE html>
@@ -15,9 +11,12 @@ if(isset($_POST["submit"])) {
   <script src="jquery-2.1.4.js"></script>
 </head>
 <style>
-
+img {
+  transition: all 0.5s ease-in-out;
+}
 img:hover {
-  box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+  box-shadow: 0 0 1px 1px rgba(240, 52, 52, 1);
+  transform: scale(1.01); 
 }
 
 img:active {
@@ -109,6 +108,10 @@ input[type=text]:focus {
     }
   }
 
+  #int_text_box {
+  padding-top: 3px;
+}
+
 
 
 </style>
@@ -120,27 +123,23 @@ input[type=text]:focus {
 <div class="container"><!--beginning of container-->
     <div class="row">    
               <?php
-              require_once('configK.php');
-                $conn = mysqli_connect(DBHOST,DBUSER,DBPASS,DBNAME);
-                if ($conn-> connect_error) {
-                  die("Connection failed: " . $conn-> connect_error);
-                }
+              require_once('config.php');
+               
                      $sql = "SELECT likes, title, image_text, image, id, parent FROM interests WHERE parent = 'parent' ORDER BY image ASC;";
-                     $result = $conn->query($sql);
+                     $result = $db->query($sql);
                   if ($result-> num_rows > 0) {
                         while ($row = $result->fetch_assoc()){
-                          echo '<form method="post" id="sectionForm" action="user-home.php">';
+                          echo '<form method="post" id="sectionForm" action="WCuser-home.php">';
                           echo '<div class="box">';
                           // echo '<img src="getImage.php?id='.$row['id'].'" />';
+
                           echo "<img src='images/".$row['image']."' >";
-                          echo "<p>".$row['image_text']."</p>";
+                          echo "<p id='int_text_box'>".$row['image_text']."</p>";
                                 // $file = $row['image'];
                                 $str = $row['title'];
                                 $cap_title = ucwords($str);
                                
-                          echo '<input type="checkbox" name="interest[]" id="imagebox" value='. $row['title'] .' />';
-                          echo '<label for="imagebox"><h2>'. $cap_title .'</h2></label>';   
-
+                          echo '<h2>'.$cap_title.' <input type="checkbox" name="interest[]" id="imagebox" value='. $row['title'] .' /></h2>';
                           echo '</div>';
                         
                         }
