@@ -6,6 +6,8 @@ if (isset($_POST["submit"])) {
     $email = $_POST["email"];
     $pwd = $_POST["pwd"];
     $pwd_repeat = $_POST["confirm_pwd"];
+    $campus = $_POST["campus"];
+    //$profilePic = $_POST[""]
 
     require_once("../Config.php");
     require_once("functions.inc.php");
@@ -27,7 +29,28 @@ if (isset($_POST["submit"])) {
         exit();
     }
 
-    createUser($db, $firstName, $lastName, $email, $pwd);
+    /*https://makitweb.com/upload-and-store-an-image-in-the-database-with-php/. Viewed:04/06/2021*/
+    $name = $_FILES['file']['name'];
+	$target_dir = "../img/profile/";
+	$target_file = $target_dir . basename($_FILES["file"]["name"]);
+	
+	//select file type
+	$imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+	
+	//Valid file extensions
+	$extensions_arr = array("jpg","jpeg","png","gif");
+	
+	//Upload file
+	move_uploaded_file($_FILES['file']['tmp_name'],$target_dir.$email.".".$name);
+		
+		
+	
+	//set parameter
+	if(in_array($imageFileType,$extensions_arr)){
+		$profilePic = "$email.$name";
+	}
+
+    createUser($db, $firstName, $lastName, $email, $pwd, $campus, $profilePic);
 
 }
 else if ($_GET["login"]) {

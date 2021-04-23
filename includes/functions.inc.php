@@ -24,7 +24,10 @@ function emptyInputEdit($firstName, $lastName) {
 
 function invalidEmail($email) {
     $result; //bool return val
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    
+    $suffix = strtolower(substr($email,-9));
+    
+    if ($suffix !== '@kent.edu') {
         $result = true;
     }
     else {
@@ -67,9 +70,9 @@ function emailExsist($db, $email) {
     mysqli_stmt_close($stmt);
 }
 
-function createUser($db, $firstName, $lastName, $email, $pwd) {
+function createUser($db, $firstName, $lastName, $email, $pwd, $campus, $profilePic) {
     $result;
-    $sql = "INSERT INTO users (firstName, lastName, email, password) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO users (firstName, lastName, email, password, campusName, profilePic) VALUES (?, ?, ?, ?, ?, ?)";
     $stmt = mysqli_stmt_init($db);
     if (!mysqli_stmt_prepare($stmt, $sql)) {
         header("location: ../register.php?error=stmtFail");
@@ -77,7 +80,7 @@ function createUser($db, $firstName, $lastName, $email, $pwd) {
 
     $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
 
-    mysqli_stmt_bind_param($stmt, "ssss", $firstName, $lastName, $email, $hashedPwd);
+    mysqli_stmt_bind_param($stmt, "ssssss", $firstName, $lastName, $email, $hashedPwd, $campus, $profilePic);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
     header("location: ../register.php?error=none");
@@ -133,21 +136,21 @@ function createPost($db, $title, $text, $file) {
     exit();
 }
 
-function editProfile($db, $firstName, $lastName, $bio) {
+function editProfile($db, $firstName, $lastName, $bio, $profilePic) {
     session_start();
     $sql = "UPDATE users
-            SET firstName = '$firstName', lastName = '$lastName', bio = '$bio'
+            SET firstName = '$firstName', lastName = '$lastName', bio = '$bio', profilePic = '$profilePic'
             WHERE email = '" .$_SESSION["email"]. "'";
     $result = mysqli_query($db,$sql);
     header("location: ../profile.php?success");  
     exit();      
 }
 
-function editProfilePwd($db, $firstName, $lastName, $bio, $pwd) {
+function editProfilePwd($db, $firstName, $lastName, $bio, $pwd, $profilePic) {
     session_start();
     $hashedPwd = password_hash($pwd, PASSWORD_DEFAULT);
     $sql = "UPDATE users
-            SET firstName = '$firstName', lastName = '$lastName', bio = '$bio', password = '$hashedPwd'
+            SET firstName = '$firstName', lastName = '$lastName', bio = '$bio', password = '$hashedPwd', profilePic = '$profilePic'
             WHERE email = '" .$_SESSION["email"]. "'";
     $result = mysqli_query($db,$sql);
     //$stmt = mysqli_stmt_init($db);

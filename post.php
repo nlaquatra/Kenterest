@@ -20,7 +20,7 @@ include_once("header.php");
 <div class="container">
   <div class="row">
     <div class="col">
-        <input type ="file" name="uploadfile" />
+        <input type ="file" class="form-control" style="width: 50%;" name="uploadfile" />
         <!-- <input type ="submit" name="upload" value="Upload" /> -->
     </div>
     <div class="col">

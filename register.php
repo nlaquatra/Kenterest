@@ -51,7 +51,7 @@ require_once "Config.php";
           echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Fill in all credentials</center></div>";
         }
         else if ($_GET["error"] === "invalidEmail") {
-          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Invalid Email</center></div>";
+          echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Invalid Email email adress <br>Remember to use @kent.edu address!</center></div>";
         }
         else if ($_GET["error"] === "invalidPwd") {
           echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> Invalid Password Confirmation</center></div>";
@@ -66,7 +66,7 @@ require_once "Config.php";
     ?>
       <center>
       <div class="col-md-7 col-lg-8">
-        <form action = "includes/register.inc.php" method = "post" class="needs-validation" novalidate>
+        <form action = "includes/register.inc.php" method = "post" enctype="multipart/form-data" novalidate>
           <div class="row g-3">
             <div class="col-sm-6">
               <label for="firstName" class="form-label">First name</label>
@@ -93,17 +93,43 @@ require_once "Config.php";
               <label for="cpass" class="form-label">Confirm Password</label>
               <input type="password" class = "form-control" name = "confirm_pwd" placeholder="Re-enter Password">
             </div>
+
+            <!--Populating Drop Down menus from Database. https://www.youtube.com/watch?v=TNPxG2yrPlM. viewed 03/30/2021-->
+            <?php
+            $getCampus = mysqli_query($db, "SELECT CampusName from campus");
+            ?>
+            <div class="col-12">
+              <label for="campus" class="form-label">Campus</label>
+              <select name="campus" class="form-select">
+			          <option value=null selected>Choose...</option>
+                <?php
+                while($rows = mysqli_fetch_assoc($getCampus))
+                {
+                  $campus_name = $rows['CampusName'];
+                  echo "<option value='$campus_name'>$campus_name</option>";
+                }
+                ?>
+			        </select>
+	
+            </div>
+
+            <div class="col-12">
+              <label for="cpass" class="form-label">Profile Picture</label>
+              <input type ="file" class="form-control" name="file" />
+            </div>
           
 
           <hr class="my-4">
-
-          <input type="submit" class = "btn btn-primary" name="submit" value="Register">
-          <a href = "login.php"><input type="button" class = "btn btn-primary" name="login" value="Login Page"></a>
-        </form>
+        
         </center>
       </div>
     </div>
+    <div style="text-align: center;">
+    <input type="submit" class = "btn btn-primary" name="submit" value="Register">
+    <a href = "login.php"><input type="button" class="btn btn-primary" name="login" value="Login Page"></a>
+    </div>
   </main>
+  </form>
   <footer class="my-5 pt-5 text-muted text-center text-small">
     <p class="mb-1">&copy; 2021 Kenterest</p>
     <ul class="list-inline">

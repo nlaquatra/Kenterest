@@ -60,14 +60,22 @@ else if (isset($_GET["success"])) {
                 <div class="row">
                     <div class="col-md-4">
                         <div class="profile-img">
-                            <img src="img/profile.png" width = 150px height = 150px alt=""/>
+                            <?php
+							$sql = "SELECT * FROM users WHERE email='" .$_SESSION["email"]. "'";
+                            $result = mysqli_query($db,$sql);
+                            $row = mysqli_fetch_assoc($result);
+							
+							$image = $row['profilePic'];
+							
+							
+							if($image!=NULL){
+								echo "<img src='img/profile/$image' class='rounded-circle' width = 150px height = 150px alt=''/>";
+							} else {
+								echo "<img src='img/profile.png' class='rounded-circle width = 150px height = 150px alt=''/>";
+							}
+							?>
                         </div>
                     </div>
-                    <?php 
-                        $sql = "SELECT * FROM users WHERE email='" .$_SESSION["email"]. "'";
-                        $result = mysqli_query($db,$sql);
-                        $row = mysqli_fetch_assoc($result);
-                    ?>
                     <div class="col-md-6">
                         <div class="profile-head">
                                     <h5>
@@ -90,7 +98,7 @@ else if (isset($_GET["success"])) {
                         <input type="button" class="profile-edit-btn" data-bs-toggle="modal" data-bs-target="#exampleModal" name="edit" value="Edit Profile"/>
                     </div>
                     <!-- Modal -->
-<form action="includes/profile.inc.php" method="POST">
+<form action="includes/profile.inc.php" method="POST" enctype="multipart/form-data">
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="editProfile" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -111,7 +119,7 @@ else if (isset($_GET["success"])) {
         <input type="password" class="form-control" name="password2">
         <label for="pic" class="col-form-label">Profile Picture</label>
         <br/>
-        <input type ="file" class="form-control" name="uploadFile" />
+        <input type ="file" class="form-control" name="file" />
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
