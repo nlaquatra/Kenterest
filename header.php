@@ -12,10 +12,13 @@ if (!isset($_SESSION["email"])) {
 <head>
     <meta charset='utf-8'>
     <meta http-equiv='X-UA-Compatible' content='IE=edge'>
-    <title>Kenterest Login</title>
+    <title>Kenterest</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/bootstrap.css'>
     <link rel='stylesheet' type='text/css' media='screen' href='css/bootstrap.min.css'>
+    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src='js/bootstrap.js'></script>
     <script src='js/bootstrap.bundle.js'></script>
 </head>

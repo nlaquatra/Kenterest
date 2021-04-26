@@ -61,9 +61,11 @@ else if (isset($_GET["success"])) {
                     <div class="col-md-4">
                         <div class="profile-img">
                             <?php
-							$sql = "SELECT * FROM users WHERE email='" .$_SESSION["email"]. "'";
+                            $email = $_SESSION["email"];
+							$sql = "SELECT * FROM users WHERE email='$email'";
                             $result = mysqli_query($db,$sql);
                             $row = mysqli_fetch_assoc($result);
+                            print_r
 							
 							$image = $row['profilePic'];
 							

@@ -1,48 +1,10 @@
 <?php
 include ('config.php');
-session_start();
-if (!isset($_SESSION["email"])) {
-  header ("location: login.php?error=notLogin");
-}
-$user_email = $_SESSION['email'];
-// submission to  get interests selected by user
-if(isset($_POST["submit"])) {
-  $interest_array = $_POST["interest"];
-  // print_r($interest_array);
-  $delimited =  implode(";", $interest_array);
-  // echo'<br>';
-  // echo $delimited;
-    $sql = "UPDATE users SET followed_interest = '$delimited' WHERE email = '$user_email'";
-    $result = $db->query($sql);
-   }
+//session_start();
 
-if(isset($_POST['search'])) {
-  $searchq = $_POST['search'];
-  $searchq = preg_replace("#[^0-9a-z]#i", "", $searchq);
-  $sql = "SELECT * FROM interests WHERE parent LIKE '%$searchq%' OR title LIKE '%$searchq%'" or die("Could not search");
-
-$result = $db->query($sql);
-    
-}
-
-?>
-<!DOCTYPE html>
-<html>
-<head>
-  <title>user-home</title>
-  <meta charset="utf-8">
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
-   <!-- Put these inside the HEAD tag -->
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <link rel='stylesheet' href='bower_components/glyphicons-only-bootstrap/css/bootstrap.min.css' />
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+?>  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
       <link rel="preconnect" href="https://fonts.gstatic.com">
-      <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
-</head>
+      <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"> -->
 <style>
 /*“Pure CSS Responsive Masonry Grid Layouts | Grid Like Pinterest with Html CSS Only - No JQuery.” YouTube, YouTube, 9 Dec. 2018, www.youtube.com/watch?v=82ej2Bpc0GE. */
 
@@ -159,6 +121,14 @@ input[type=text]:focus {
 }
 
 </style>
+
+<!-- Nav -->
+
+<?php require_once("header.php"); ?>
+
+<!-- End Nav -->
+
+<!--
 <div class="container">
   
     <div class="row">   
@@ -186,7 +156,35 @@ input[type=text]:focus {
               </div>
             </nav>
         </div>
-</div>
+</div> -->
+
+<?php 
+
+/*if (!isset($_SESSION["email"])) {
+  header ("location: login.php?error=notLogin");
+}*/
+$user_email = $_SESSION['email'];
+// submission to  get interests selected by user
+if(isset($_POST["submit"])) {
+  $interest_array = $_POST["interest"];
+  // print_r($interest_array);
+  $delimited =  implode(";", $interest_array);
+  // echo'<br>';
+  // echo $delimited;
+    $sql = "UPDATE users SET followed_interest = '$delimited' WHERE email = '$user_email'";
+    $result = $db->query($sql);
+   }
+
+if(isset($_POST['search'])) {
+  $searchq = $_POST['search'];
+  $searchq = preg_replace("#[^0-9a-z]#i", "", $searchq);
+  $sql = "SELECT * FROM interests WHERE parent LIKE '%$searchq%' OR title LIKE '%$searchq%'" or die("Could not search");
+
+$result = $db->query($sql);
+    
+}
+
+?>
 
 <body>
 
