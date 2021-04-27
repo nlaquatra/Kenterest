@@ -9,7 +9,7 @@ if (isset($_POST["submit"])) {
     $campus = $_POST["campus"];
     //$profilePic = $_POST[""]
 
-    require_once("../Config.php");
+    require_once("../config.php");
     require_once("functions.inc.php");
 
     if (emptyInputRegister($firstName, $lastName, $email, $pwd, $pwd_repeat) !== false) {

@@ -4,7 +4,7 @@ if (isset($_POST["login"])) {
     $email = $_POST["username"];
     $pwd = $_POST["pwd"];
 
-    require_once("../Config.php");
+    require_once("../config.php");
     require_once("functions.inc.php");
 
     if (emptyInputLogin($email, $pwd) !== false) {

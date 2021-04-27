@@ -1,6 +1,6 @@
 <?php 
 include_once("functions.inc.php");
-include_once("../Config.php");
+include_once("../config.php");
 session_start();
 
 if (isset($_POST['add-post'])) {
