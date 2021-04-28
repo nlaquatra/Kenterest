@@ -18,7 +18,25 @@ if(isset($_GET['search'])) {
     
 }
 
-
+if(isset($_POST['add_interest'])) {
+  $new_interest = $_POST['add_interest'];
+  $sql = "SELECT followed_interest FROM users WHERE email = '$user_email'";
+  $result = $db->query($sql);
+   if ($result-> num_rows > 0) {
+                while ($row = $result->fetch_assoc()){
+                  $prep_csv = $row['followed_interest'];
+                  $d_file = explode(";", $prep_csv);
+                  $existing_interest_array = array();
+                  $existing_interest_array = $d_file;
+                }
+                if (in_array($new_interest, $existing_interest_array) == false) {
+                  array_push($existing_interest_array, $new_interest);
+                  $updated_interest_csv =  implode(";", $existing_interest_array);
+                  $sql = "UPDATE users SET followed_interest = '$updated_interest_csv' WHERE email = '$user_email'";
+                  $result = $db->query($sql);
+                }                      
+    }
+}
  
 
 
@@ -163,7 +181,53 @@ input[type=text]:focus {
 }
 
 </style>
-<div class="container">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+
+      <a class="navbar-brand" href="#">Kenterest</a>
+    
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="WCuser-home.php">Home</a></li>
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="profile.php">Your Profile</a></li>
+          <li><a href="liked.php">Posts you Like</a></li>
+          <li><a href="new-interest.php">Add a New Interest</a></li>
+        </ul>
+      </li>
+        <li><a href="#">Trending</a></li>
+
+      </ul>
+       <ul class="nav navbar-nav navbar-right">
+       <li><a href="logout.php">Logout</a></li>
+    </ul>
+    <form class="navbar-form navbar-right" action="filter.php" method="get">
+          <div class="form-group">
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <input type="text" class="form-control" name="search" placeholder="Search" required>
+                  </div>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="submit" class="btn btn-danger">Search</button>
+                  </div>
+          </div>
+    </form>
+  
+  </div>
+
+  </div>
+</nav>
+<br><br>
+<!-- <div class="container">
   
     <div class="row">   
             <nav class="navbar navbar-inverse navbar-fixed-top col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -187,7 +251,7 @@ input[type=text]:focus {
               </div>
             </nav>
         </div>
-</div>
+</div> -->
 <body>
   <br>
   <center><h2>Your filtered Interests </h2></center>
@@ -248,15 +312,19 @@ if(isset($_GET['search'])) {
                               </form>
                                
                                 <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add your comment to this interest" type="submit" name="Post" value="Post">Post</button>
-                                <form  method="post" action="liked.php">
-                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Like this Interest" type="submit" name="Like" value="<?php echo $row['id']; ?>">Like</button>    
-                                      
-                            </form>
+
+
+                                 <form  method="post" action="liked.php">
+                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Like this Interest" type="submit" name="Like" value="<?php echo $row['id']; ?>">Like <span class="badge"><?php echo $row['likes']; ?></span></button>       
+                                </form>
                                
                             <br>
                             <h4>Category: <?php echo $cap_category; ?></h4>
                               <a href="filter.php?search= <?php echo $row['parent']; ?>"><button class="btn btn-danger" type="submit" name="search" >Check out Other Interests Like this</button></a>
-                          
+                           <br><br>
+                               <form method="post" action="WCuser-home.php">
+                                  <button class="btn btn-default" type="submit" name="add_interest" value="<?php echo $row['parent']; ?>">Follow This Interest Category</button>
+                              </form>
                             </div> <!-- //END 4 div -->
                          </div> <!-- //END row modal body --> 
                       </div> <!-- //END modal body -->
@@ -334,7 +402,10 @@ if(isset($_GET['search'])) {
                             <br>
                             <h4>Category: <?php echo $cap_category; ?></h4>
                               <a href="filter.php?search= <?php echo $row['parent']; ?>"><button class="btn btn-danger" type="submit" name="search" >Check out Other Interests Like this</button></a>
-                          
+                           <br><br>
+                               <form method="post" action="WCuser-home.php">
+                                  <button class="btn btn-default" type="submit" name="add_interest" value="<?php echo $row['parent']; ?>">Follow This Interest Category</button>
+                              </form>
                             </div> <!-- //END 4 div -->
                          </div> <!-- //END row modal body --> 
                       </div> <!-- //END modal body -->

@@ -188,35 +188,56 @@ input[type=text]:focus {
   padding-top: 3px;
 }
 </style>
-<div class="container">
+
   
-    <div class="row">   
-            <nav class="navbar navbar-inverse navbar-fixed-top col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <div class="container-fluid">
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="#">Trending</a></li>
-                 
-                </ul>
-                <form class="navbar-form navbar-right" action="filter.php" method="get">
-                  <div class="form-group">
-                    <div class="btn-group" role="group" aria-label="Basic example">
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
+
+      <a class="navbar-brand" href="#">Kenterest</a>
+    
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="WCuser-home.php">Home</a></li>
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="profile.php">Your Profile</a></li>
+          <li class="active"><a href="liked.php">Posts you Like</a></li>
+          <li><a href="new-interest.php">Add a New Interest</a></li>
+        </ul>
+      </li>
+        <li><a href="#">Trending</a></li>
+
+      </ul>
+       <ul class="nav navbar-nav navbar-right">
+       <li><a href="logout.php">Logout</a></li>
+    </ul>
+    <form class="navbar-form navbar-right" action="filter.php" method="get">
+          <div class="form-group">
+                  <div class="btn-group" role="group" aria-label="Basic example">
                     <input type="text" class="form-control" name="search" placeholder="Search" required>
                   </div>
                   <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="submit" class="btn btn-danger">Search</button>
-                </div>
-                </div>
-                </form>
-                <div class="navbar-form navbar-right" role="group" aria-label="Basic example">
-                  <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-user"></span></button>
-                </div>
-            
-              </div>
-            </nav>
-        </div>
-</div>
+                    <button type="submit" class="btn btn-danger">Search</button>
+                  </div>
+          </div>
+    </form>
+  
+  </div>
 
+  </div>
+</nav>
+
+  <br>
+    <br>
 
 <body>
 	<br>
