@@ -11,6 +11,17 @@ function emptyInputRegister($firstName, $lastName, $email, $pwd, $pwd_repeat) {
     return $result;
 }
 
+function emptyInputPost($title, $parent, $image, $image_text) {
+    $result; //bool return val
+    if (empty($title) || empty($parent) || empty($image) || empty($image_text)) {
+        $result = true;
+    }
+    else {
+        $result = false;
+    }
+    return $result;
+}
+
 function emptyInputEdit($firstName, $lastName) {
     $result; //bool return val
     if (empty($firstName) || empty($lastName)) {
@@ -116,7 +127,7 @@ function loginUser($db, $email, $pwd) {
     else if ($checkPwd === true) {
         session_start();
         $_SESSION["email"] = $emailExsist["email"];
-        $_SESSION["id"] = $row["id"];
+        $_SESSION["userID"] = $emailExsist["userID"];
         header("location: ../index.php");
         exit();
     }

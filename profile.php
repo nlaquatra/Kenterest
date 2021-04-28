@@ -1,7 +1,8 @@
 <?php
 include_once("header.php");
 include_once("Config.php");
-
+include_once("config.php");
+$userID = $_SESSION["userID"];
 /*
 
 if(isset($_POST['upload'])) {
@@ -65,7 +66,7 @@ else if (isset($_GET["success"])) {
 							$sql = "SELECT * FROM users WHERE email='$email'";
                             $result = mysqli_query($db,$sql);
                             $row = mysqli_fetch_assoc($result);
-                          
+
 							
 							$image = $row['profilePic'];
 							
@@ -130,7 +131,8 @@ else if (isset($_GET["success"])) {
       </div>
     </div>
   </div>
-</div>
+</div> <!-- End First Modal -->
+
                 </div>
                 <div class="row">
                     <div class="col-md-4">
@@ -147,28 +149,65 @@ else if (isset($_GET["success"])) {
                         </div>
                     </div>
                     <div class="col-md-8">
-                        <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="tab-content profile-tab" id="myTabContent" style="max-width: 60%;">
                             <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
                                         <div class="row">
-                                            <div class="col-md-9">
-                                                <p>First Name: <?php echo $row["firstName"]; ?></p>
+                                            <div class="col-6 col-sm-4">
+                                                <p>First Name: <br><?php echo $row["firstName"]; ?></p>
                                             </div>       
-                                            <div class="col-md-9">
+                                            <div class="col-6 col-sm-4">
                                                 <p>Last Name:  <?php echo $row["lastName"]; ?></p>
                                             </div>
-                                            <div class="col-md-9">
+                                            <div class="col-6 col-sm-4">
                                                 <p>Email: <?php echo $row["email"]; ?></p>
                                             </div>
                                         </div>
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                                 <div class="row">
-                                    <div class="col-md-9">
-                                        <label>Your Posts</label><br/>
+                                <?php 
+                                    $result = mysqli_query($db, "SELECT * FROM interests WHERE userID='$userID'");
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        
+                                ?>
+                                    <div class="col">
+                                        <label><a type="button" data-bs-toggle="modal" data-bs-target="#<?php echo $row['id']; ?>"><?php echo $row['title']; } ?></a></label><br/>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>           
-        </div>
+                </div>
+            </div>
+            <!-- Start second Modal -->
+<?php
+    $data = mysqli_query($db, "SELECT * FROM interests WHERE userID='$userID'");
+    while ($row2 = mysqli_fetch_assoc($data)) {
+?>
+<div class="modal fade" id="<?php echo $row2['id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel"><?php echo $row2['title'];  ?></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+      <div class="container-fluid">
+      <div class="row">
+      <?php echo $row2['image_text']; ?>
+      </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+<?php } ?>
+<!-- End Second Modal -->
+
+        <?php include_once("footer.php"); ?>
+    </body>
+</html>
