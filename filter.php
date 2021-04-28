@@ -6,7 +6,7 @@ if (!isset($_SESSION["email"])) {
   header ("location: login.php?error=notLogin");
 }
 
-include ('config.php');
+include ('Config.php');
       
 
 if(isset($_GET['search'])) {

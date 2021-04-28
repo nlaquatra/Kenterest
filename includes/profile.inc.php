@@ -1,5 +1,5 @@
 <?php
-include_once("../config.php");
+include_once("../Config.php");
 
 if (isset($_POST["submit"])) {
     $firstName = $_POST["firstName"];

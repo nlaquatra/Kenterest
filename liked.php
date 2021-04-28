@@ -1,12 +1,53 @@
 <?php
 session_start();
-include ('config.php');
+include ('Config.php');
 // makes sure user logs in first
 //prevents typing link in url directly to access
 if (!isset($_SESSION["email"])) {
   header ("location: login.php?error=notLogin");
 }
 $user_email = $_SESSION['email'];
+
+
+if(isset($_POST['add_interest'])) {
+  $new_interest = $_POST['add_interest'];
+  $sql = "SELECT followed_interest FROM users WHERE email = '$user_email'";
+  $result = $db->query($sql);
+   if ($result-> num_rows > 0) {
+                while ($row = $result->fetch_assoc()){
+                  $prep_csv = $row['followed_interest'];
+                  $d_file = explode(";", $prep_csv);
+                  $existing_interest_array = array();
+                  $existing_interest_array = $d_file;
+                }
+                if (in_array($new_interest, $existing_interest_array) == false) {
+                  array_push($existing_interest_array, $new_interest);
+                  $updated_interest_csv =  implode(";", $existing_interest_array);
+                  $sql = "UPDATE users SET followed_interest = '$updated_interest_csv' WHERE email = '$user_email'";
+                  $result = $db->query($sql);
+                }                      
+    }
+}
+
+// if(isset($_POST['Like'])) {
+//   $liked_interest_to_count = $_POST['Like'];
+//   $sql = "SELECT interest_id FROM likes WHERE userid = '$user_email'";
+//   $result = $db->query($sql);
+//   if ($result-> num_rows > 0) {
+//                 while ($row = $result->fetch_assoc()){
+                 
+//                   $existing_interest_id = $row['interest_id'];
+       
+//    if ($liked_interest_to_count != $existing_interest_id) {
+//     echo "Already Liked";
+//    } else {
+            
+         
+//                 $sql = "INSERT INTO likes SET userid = '$user_email', interest_id = '.$liked_interest_to_count.'";
+//                 $result = $db->query($sql);
+//               }
+
+// }
 
 ?>
 <head>
@@ -223,11 +264,16 @@ input[type=text]:focus {
 	        array_push($_SESSION['favorites'], $interest_id);
 
 	        $clean_array = array_unique($_SESSION['favorites']);
-		
+
+          if (($key = array_search($interest_id, $clean_array) !== false)) {
+        		  $sql = "UPDATE interests SET likes = likes +1 WHERE id = '$interest_id'";
+              $result = $db->query($sql);
+          }
+
 			$delimited_likes =  implode(";", $clean_array);
 		    $sql = "UPDATE users SET liked_interests = '$delimited_likes' WHERE email = '$user_email'";
 		    $result = $db->query($sql);
-		  
+
 
 		    $sql = "SELECT liked_interests FROM users WHERE email = '$user_email'";
 		    $result = $db->query($sql);
@@ -296,6 +342,10 @@ input[type=text]:focus {
                             <br>
                             <h4>Category: <?php echo $cap_category; ?></h4>
                               <a href="filter.php?search= <?php echo $row['parent']; ?>"><button class="btn btn-danger" type="submit" name="search" >Check out Other Interests Like this</button></a>
+                              <br><br>
+                               <form method="post" action="WCuser-home.php">
+                                  <button class="btn btn-default" type="submit" name="add_interest" value="<?php echo $row['parent']; ?>">Follow This Interest Category</button>
+                              </form>
                           
                             </div> <!-- //END 4 div -->
                          </div> <!-- //END row modal body --> 

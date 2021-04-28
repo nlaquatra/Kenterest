@@ -1,6 +1,6 @@
 <?php
 include_once("header.php");
-include_once("config.php");
+include_once("Config.php");
 
 /*
 
@@ -65,7 +65,7 @@ else if (isset($_GET["success"])) {
 							$sql = "SELECT * FROM users WHERE email='$email'";
                             $result = mysqli_query($db,$sql);
                             $row = mysqli_fetch_assoc($result);
-                            print_r
+                          
 							
 							$image = $row['profilePic'];
 							

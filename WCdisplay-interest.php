@@ -123,7 +123,7 @@ input[type=text]:focus {
 <div class="container"><!--beginning of container-->
     <div class="row">    
               <?php
-              require_once('config.php');
+              require_once('Config.php');
                
                      $sql = "SELECT likes, title, image_text, image, id, parent FROM interests WHERE parent = 'parent' ORDER BY image ASC;";
                      $result = $db->query($sql);

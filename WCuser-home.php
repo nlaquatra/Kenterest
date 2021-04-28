@@ -1,10 +1,89 @@
 <?php
-include ('config.php');
-//session_start();
+include ('Config.php');
+session_start();
+if (!isset($_SESSION["email"])) {
+  header ("location: login.php?error=notLogin");
+}
+$user_email = $_SESSION['email'];
+// submission to  get interests selected by user
+if(isset($_POST["submit"])) {
+  $interest_array = $_POST["interest"];
+  // print_r($interest_array);
+  $delimited =  implode(";", $interest_array);
+  // echo'<br>';
+  // echo $delimited;
+    $sql = "UPDATE users SET followed_interest = '$delimited' WHERE email = '$user_email'";
+    $result = $db->query($sql);
+   }
 
-?>  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+if(isset($_POST['add_interest'])) {
+  $new_interest = $_POST['add_interest'];
+  $sql = "SELECT followed_interest FROM users WHERE email = '$user_email'";
+  $result = $db->query($sql);
+   if ($result-> num_rows > 0) {
+                while ($row = $result->fetch_assoc()){
+                  $prep_csv = $row['followed_interest'];
+                  $d_file = explode(";", $prep_csv);
+                  $existing_interest_array = array();
+                  $existing_interest_array = $d_file;
+                }
+                if (in_array($new_interest, $existing_interest_array) == false) {
+                  array_push($existing_interest_array, $new_interest);
+                  $updated_interest_csv =  implode(";", $existing_interest_array);
+                  $sql = "UPDATE users SET followed_interest = '$updated_interest_csv' WHERE email = '$user_email'";
+                  $result = $db->query($sql);
+                }                      
+    }
+}
+
+if(isset($_POST['remove_interest'])){
+    $remove_followed_interest = $_POST['remove_interest'];
+    $sql = "SELECT followed_interest FROM users WHERE email = '$user_email'";
+        $result = $db->query($sql);
+          if ($result-> num_rows > 0) {
+                    while ($row = $result->fetch_assoc()){
+                    $prep_csv = $row['followed_interest']; 
+                    $d_file = explode(";", $prep_csv);
+                    echo '<br>';
+                    $existing_interest_array = array();
+                    $existing_interest_array = $d_file;  
+                    if (($key = array_search($remove_followed_interest, $existing_interest_array)) !== false) {
+                            array_splice($existing_interest_array, $key,1 );
+                        }  
+                        $updated_interest_array =  implode(";", $existing_interest_array);
+
+          }
+          $updated_interest_array =  implode(";", $existing_interest_array);
+          $sql = "UPDATE users SET followed_interest = '$updated_interest_array' WHERE email = '$user_email'";
+          $result = $db->query($sql);
+  }
+}
+
+if(isset($_POST['search'])) {
+  $searchq = $_POST['search'];
+  $searchq = preg_replace("#[^0-9a-z]#i", "", $searchq);
+  $sql = "SELECT * FROM interests WHERE parent LIKE '%$searchq%' OR title LIKE '%$searchq%'" or die("Could not search");
+  $result = $db->query($sql);
+}
+
+?>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>user-home</title>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href='http://fonts.googleapis.com/css?family=Lobster' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+   <!-- Put these inside the HEAD tag -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link rel='stylesheet' href='bower_components/glyphicons-only-bootstrap/css/bootstrap.min.css' />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
       <link rel="preconnect" href="https://fonts.gstatic.com">
-      <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet"> -->
+      <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
+</head>
 <style>
 /*“Pure CSS Responsive Masonry Grid Layouts | Grid Like Pinterest with Html CSS Only - No JQuery.” YouTube, YouTube, 9 Dec. 2018, www.youtube.com/watch?v=82ej2Bpc0GE. */
 
@@ -122,17 +201,7 @@ input[type=text]:focus {
 
 </style>
 
-<!-- Nav -->
-
-<?php require_once("header.php"); ?>
-
-<!-- End Nav -->
-
-<!--
-<div class="container">
-  
-    <div class="row">   
-            <nav class="navbar navbar-inverse navbar-fixed-top col-lg-12 col-md-12 col-sm-12 col-xs-12">
+         <!--    <nav class="navbar navbar-inverse navbar-fixed-top col-lg-12 col-md-12 col-sm-12 col-xs-12">
               <div class="container-fluid">
                 <ul class="nav navbar-nav">
                   <li class="active"><a href="#">Home</a></li>
@@ -154,42 +223,61 @@ input[type=text]:focus {
                 </div>
             
               </div>
-            </nav>
-        </div>
-</div> -->
+            </nav> -->
 
-<?php 
+<nav class="navbar navbar-inverse navbar-fixed-top">
+  <div class="container-fluid">
+    <div class="navbar-header">
 
-/*if (!isset($_SESSION["email"])) {
-  header ("location: login.php?error=notLogin");
-}*/
-$user_email = $_SESSION['email'];
-// submission to  get interests selected by user
-if(isset($_POST["submit"])) {
-  $interest_array = $_POST["interest"];
-  // print_r($interest_array);
-  $delimited =  implode(";", $interest_array);
-  // echo'<br>';
-  // echo $delimited;
-    $sql = "UPDATE users SET followed_interest = '$delimited' WHERE email = '$user_email'";
-    $result = $db->query($sql);
-   }
-
-if(isset($_POST['search'])) {
-  $searchq = $_POST['search'];
-  $searchq = preg_replace("#[^0-9a-z]#i", "", $searchq);
-  $sql = "SELECT * FROM interests WHERE parent LIKE '%$searchq%' OR title LIKE '%$searchq%'" or die("Could not search");
-
-$result = $db->query($sql);
+      <a class="navbar-brand" href="#">Kenterest</a>
     
-}
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li class="active"><a href="WCuser-home.php">Home</a></li>
+        <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="profile.php">Your Profile</a></li>
+          <li><a href="liked.php">Posts you Like</a></li>
+          <li><a href="new-interest.php">Add a New Interest</a></li>
+        </ul>
+      </li>
+        <li><a href="#">Trending</a></li>
 
-?>
+      </ul>
+       <ul class="nav navbar-nav navbar-right">
+       <li><a href="logout.php">Logout</a></li>
+    </ul>
+    <form class="navbar-form navbar-right" action="filter.php" method="get">
+          <div class="form-group">
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <input type="text" class="form-control" name="search" placeholder="Search" required>
+                  </div>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="submit" class="btn btn-danger">Search</button>
+                  </div>
+          </div>
+    </form>
+  
+  </div>
+
+  </div>
+</nav>
+
+
+
 
 <body>
 
   <!--endnavbar-->
-  <br>
+  <br><br>
 <center><h2>Interests that you follow</h2></center>
 <div class="container"><!--beginning of container-->
   
@@ -249,21 +337,29 @@ if(isset($user_email)) {
                             <h4><?php echo $row['image_text']; ?></h4>
                          
 
-                            <form  method="post" action="liked.php">
+                            <form  method="post" action="WCuser-home.php">
                               <label for="comment-text">Comment: </label>
-                              <input type="text" class="form-group" id="comment-text">
+                              <input type="text" id="comment-text">
                                 <br>
                               </form>
                                
                                 <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add your comment to this interest" type="submit" name="Post" value="Post">Post</button>
+                                <?php
+                                
+
+
+                                ?>
                                 <form  method="post" action="liked.php">
-                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Like this Interest" type="submit" name="Like" value="<?php echo $row['id']; ?>">Like <span class="badge">0</span></button>    
-                                      
-                            </form>
+                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Like this Interest" type="submit" name="Like" value="<?php echo $row['id']; ?>">Like <span class="badge"><?php echo $row['likes']; ?></span></button>       
+                                </form>
                                
                             <br>
                             <h4>Category: <?php echo $cap_category; ?></h4>
-                              <a href="filter.php?search= <?php echo $row['parent']; ?>"><button class="btn btn-danger" type="submit" name="search" >Check out Other Interests Like this</button></a>
+                             
+                              <br><br>
+                              <form method="post" action="WCuser-home.php">
+                                  <button class="btn btn-default" type="submit" name="remove_interest" value="<?php echo $row['parent']; ?>">Stop Following This Interest Category</button>
+                              </form>
                           
                             </div> <!-- //END 4 div -->
                          </div> <!-- //END row modal body --> 
@@ -280,10 +376,9 @@ if(isset($user_email)) {
               }
           }
       }
-    }
+    } 
   }
 }
-
     ?>  
     </div>
       <!-- ends container -->

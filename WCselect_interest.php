@@ -1,5 +1,5 @@
 <?php
-include_once("config.php");
+include_once("Config.php");
   // Create database connection
   //$db = mysqli_connect("localhost", "root", "", "mydata");
 
@@ -78,11 +78,6 @@ include_once("config.php");
    }
 </style>
 
-<!-- Nav Start -->
-
-<?php require_once("header.php"); ?>
-
-<!-- End Nav -->
 
 <body>
 <div id="content">
