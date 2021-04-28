@@ -198,7 +198,7 @@ $result = $db->query($sql);
     <?php
 
 if(isset($user_email)) {
-  $sql = "SELECT followed_interest FROM users WHERE email = '$user_email'";
+  $sql = "SELECT followed_interest FROM users WHERE email = '" . $user_email . "'";
   $result = $db->query($sql);
    if ($result-> num_rows > 0) {
                 while ($row = $result->fetch_assoc()){
@@ -213,7 +213,7 @@ if(isset($user_email)) {
                 while ($row = $result->fetch_assoc()){ ?>
                   <div class="box"> <!-- //START box -->
                      <!--  //interest image -->
-                       <center><input type="image" id="image_btn" src="images/<?php echo $row['image']; ?>" data-toggle="modal" data-target="#<?php echo$row['id']; ?>">
+                       <center><input type="image" id="image_btn" src="images/<?php echo $row['image']; ?>" data-toggle="modal" data-target="#<?php echo $row['id']; ?>">
                        </center>
                           <!-- //interest description -->
                          <p id='int_text_box'><?php echo $row['image_text']; ?></p>
@@ -294,7 +294,7 @@ if(isset($user_email)) {
       
     <?php
 
-    $sql = "SELECT title, image, image_text, likes, parent FROM interests WHERE parent = 'parent';";
+    $sql = "SELECT title, image, image_text, likes, parent FROM interests WHERE parent = 'parent' LIMIT 15;";
     $result = $db->query($sql);
     if ($result-> num_rows > 0) {
                 while ($row = $result->fetch_assoc()){
