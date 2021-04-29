@@ -410,9 +410,16 @@ input[type=text]:focus {
                             </div> <!-- //END 4 div -->
                          </div> <!-- //END row modal body --> 
                       </div> <!-- //END modal body -->
-                      <div class="modal-footer"><!--  // START modal-footer -->
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-
+                       <div class="modal-footer"><!--  // START modal-footer -->
+                          <div class="col-md-10"></div>
+                        <button type="button" class="btn btn-default col-md-2" data-dismiss="modal">Close</button>
+                      
+                        <form method="post" action="index.php">
+                        <button type="submit" onclick="myalert()" class="btn btn-default btn-sm col-md-1" data-toggle="tooltip" data-placement="bottom" title="Is this Post Offensive? Click to report this Post" name="flag_post" value="<?php echo $int_id; ?>">
+                          <span class="glyphicon glyphicon-flag"></span>
+                        </button>
+                        <div class="col-md-11"></div>
+                      </form>
                         
                       </div> <!-- //END modal-footer -->
                     </div> <!-- // END modal-content -->
@@ -438,4 +445,9 @@ input[type=text]:focus {
   </div>
 </div>
 </body>
+<script>
+function myalert() {
+  alert("We will address this post, Thank you for Making Kenterest Safe");
+}
+</script>
 <!-- <?php include'footer.php'; ?>  -->

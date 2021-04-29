@@ -356,7 +356,7 @@ input[type=text]:focus {
                         <button type="button" class="btn btn-default col-md-2" data-dismiss="modal">Close</button>
                       
                         <form method="post" action="index.php">
-                        <button type="submit" class="btn btn-default btn-sm col-md-1" data-toggle="tooltip" data-placement="bottom" title="Is this Post Offensive? Click to report this Post" name="flag_post" value="<?php echo $int_id; ?>">
+                        <button type="submit" onclick="myalert()" class="btn btn-default btn-sm col-md-1" data-toggle="tooltip" data-placement="bottom" title="Is this Post Offensive? Click to report this Post" name="flag_post" value="<?php echo $int_id; ?>">
                           <span class="glyphicon glyphicon-flag"></span>
                         </button>
                         <div class="col-md-11"></div>
@@ -376,5 +376,10 @@ input[type=text]:focus {
       <!-- ends container -->
 </div>
 </body>
+<script>
+function myalert() {
+  alert("We will address this post, Thank you for Making Kenterest Safe");
+}
+</script>
 </html>
 
