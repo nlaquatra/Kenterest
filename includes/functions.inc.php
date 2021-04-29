@@ -209,3 +209,27 @@ function postOK($db, $postID) {
 	header("location: ../check-flags.php");
     exit();
 }
+
+function changeUserType($db, $userID) {
+    $sql = "UPDATE users SET UserType = 1 - UserType WHERE id=$userID";
+    $stmt = mysqli_stmt_init($db);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../modUsers.php?error=stmtFail");
+    }
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+	header("location: ../modUsers.php");
+    exit();
+}
+
+function changeUserStatus($db, $userID) {
+    $sql = "UPDATE users SET Status = 1 - Status WHERE id=$userID";
+    $stmt = mysqli_stmt_init($db);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../modUsers.php?error=stmtFail");
+    }
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+	header("location: ../modUsers.php");
+    exit();
+}
