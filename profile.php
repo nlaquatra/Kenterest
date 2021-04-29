@@ -1,6 +1,6 @@
 <?php
 include_once("header.php");
-//include_once("config.php");
+include_once("config.php");
 $userID = $_SESSION["userID"];
 /*
 
@@ -151,6 +151,13 @@ else if (isset($_GET["success"])) {
                             <a href="liked.php">Liked Interest</a><br/>
                             <a href="new-interest.php">Post Interest</a></br>
                             <a href="includes/logout.inc.php">Logout</a><br/>
+                            <?php 
+                                if ($row['userType'] == 1) {
+                                
+                            ?>
+                            <hr style="max-width: 50&;">
+                            <a href="adminPanel.php">Admin Panel</a>
+                            <?php } ?>
                         </div>
                     </div>
                     <div class="col-md-8">

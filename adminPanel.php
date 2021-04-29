@@ -2,7 +2,7 @@
 
 <?php 
     require_once("header.php");
-    require_once("Config.php");
+    require_once("config.php");
 ?>
 
 <!-- End Header -->

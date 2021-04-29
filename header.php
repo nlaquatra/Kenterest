@@ -74,6 +74,17 @@ if(isset($_POST['submit'])) {
         <li class="nav-item">
           <a class="nav-link" href="trending.php" tabindex="-1" aria-disabled="true">Trending</a>
         </li>
+        <?php
+          $email = $_SESSION['email'];
+          $sql = "SELECT userType FROM users WHERE email='$email'";
+          $result = mysqli_query($db,$sql);
+          $row = mysqli_fetch_assoc($result);
+          if ($row['userType'] == 1) { ?>
+            <li class="nav-item">
+            <a class="nav-link" href="adminPanel.php" tabindex="-1" aria-disabled="true">Admin Panel</a>
+            </li>
+        <?php  } ?>
+        
         <li class="nav-item" style="margin-left: 15px;">
           <a class="nav-link btn btn-danger btn-sm" type="button" style="color: white;"aria-current="page" href="logout.php">Logout</a>
         </li>

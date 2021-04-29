@@ -259,6 +259,16 @@ input[type=text]:focus {
         </ul>
       </li>
         <li><a href="trending.php">Trending</a></li>
+        <?php
+          $email = $_SESSION['email'];
+          $sql = "SELECT userType FROM users WHERE email='$email'";
+          $result = mysqli_query($db,$sql);
+          $row = mysqli_fetch_assoc($result);
+          if ($row['userType'] == 1) { ?>
+            <li class="nav-item">
+            <a class="nav-link" href="adminPanel.php" tabindex="-1" aria-disabled="true">Admin Panel</a>
+            </li>
+        <?php  } ?>
       </ul>
      
     <form class="navbar-form navbar-right" action="filter.php" method="get">
