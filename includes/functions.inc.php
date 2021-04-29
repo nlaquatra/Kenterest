@@ -128,7 +128,16 @@ function loginUser($db, $email, $pwd) {
         session_start();
         $_SESSION["email"] = $emailExsist["email"];
         $_SESSION["userID"] = $emailExsist["userID"];
-        header("location: ../index.php");
+        $sql = "SELECT followed_interest FROM users WHERE email='" . $_SESSION['email'] . "'";
+        $result = mysqli_query($db,$sql);
+        $row = mysqli_fetch_assoc($result);
+        if ($row['followed_interest'] === NULL) {
+            header("location: ../WCdisplay-interest.php");
+        }
+        else {
+            header("location: ../index.php");
+        }
+        //header("location: ../index.php");
         exit();
     }
 }

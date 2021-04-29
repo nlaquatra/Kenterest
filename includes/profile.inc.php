@@ -7,7 +7,7 @@ if (isset($_POST["submit"])) {
     $bio = $_POST["bio"];
     $pwd = $_POST["password"];
     $pwd_repeat = $_POST["password2"];
-    //$picture = $_POST["uploadFile"];
+    $profilePic = $_POST["profilePic"];
 
     require_once("functions.inc.php");
 

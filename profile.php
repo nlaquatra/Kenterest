@@ -126,6 +126,7 @@ else if (isset($_GET["success"])) {
         <label for="pic" class="col-form-label">Profile Picture</label>
         <br/>
         <input type ="file" class="form-control" name="file" />
+        <input type ="hidden" class="form-control" name="profilePic" value="<?php echo $row['profilePic'];?>">
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -172,10 +173,11 @@ else if (isset($_GET["success"])) {
                                 <?php 
                                     $result = mysqli_query($db, "SELECT * FROM interests WHERE userID='$userID'");
                                     while ($row = mysqli_fetch_assoc($result)) {
+                                        $title = $row['title'];
                                         
                                 ?>
                                     <div class="col">
-                                        <label><a type="button" data-bs-toggle="modal" data-bs-target="#<?php echo $row['id']; ?>"><?php echo $row['title']; } ?></a></label><br/>
+                                        <label><a href="viewPost.php?id=<?php echo $row['id']; ?>" target="_blank"><?php echo $title; } ?></a></label><br/>
                                     </div>
                                 </div>
                             </div>
@@ -183,34 +185,6 @@ else if (isset($_GET["success"])) {
                     </div>
                 </div>
             </div>
-            <!-- Start second Modal -->
-<?php
-    $data = mysqli_query($db, "SELECT * FROM interests WHERE userID='$userID'");
-    while ($row2 = mysqli_fetch_assoc($data)) {
-?>
-<div class="modal fade" id="<?php echo $row2['id']; ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel"><?php echo $row2['title'];  ?></h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-      <div class="container-fluid">
-      <div class="row">
-      <?php echo $row2['image_text']; ?>
-      </div>
-      </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-<?php } ?>
-<!-- End Second Modal -->
 
         <?php include_once("footer.php"); ?>
     </body>

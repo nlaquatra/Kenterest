@@ -1,5 +1,5 @@
 <?php
-include ('Config.php');
+include ('config.php');
 session_start();
 if (!isset($_SESSION["email"])) {
   header ("location: login.php?error=notLogin");
@@ -239,12 +239,13 @@ input[type=text]:focus {
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="WCuser-home.php">Home</a></li>
+        <li class="active"><a href="index.php">Home</a></li>
         <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="profile.php">Your Profile</a></li>
+          <li><a href="WCdisplay-interest.php">Select Interests</a></li>
           <li><a href="liked.php">Posts you Like</a></li>
           <li><a href="new-interest.php">Add a New Interest</a></li>
           <li><a href="logout.php">Logout</a></li>
@@ -408,5 +409,6 @@ if(isset($user_email)) {
     ?>  
     </div>
 </div>
+
 </body>
 </html>

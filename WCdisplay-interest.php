@@ -123,13 +123,13 @@ input[type=text]:focus {
 <div class="container"><!--beginning of container-->
     <div class="row">    
               <?php
-              require_once('Config.php');
+              require_once('config.php');
                
                      $sql = "SELECT likes, title, image_text, image, id, parent FROM interests WHERE parent = 'parent' ORDER BY image ASC;";
                      $result = $db->query($sql);
                   if ($result-> num_rows > 0) {
                         while ($row = $result->fetch_assoc()){
-                          echo '<form method="post" id="sectionForm" action="WCuser-home.php">';
+                          echo '<form method="post" id="sectionForm" action="index.php">';
                           echo '<div class="box">';
                           // echo '<img src="getImage.php?id='.$row['id'].'" />';
 
