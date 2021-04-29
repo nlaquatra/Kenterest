@@ -308,19 +308,15 @@ input[type=text]:focus {
                                 </form>
 
 
+                                   
                                     <!-- DISPLAY USER COMMENTS -->
+                                    <br>
+                                    <h5>Comments on this Post</h5>
+                                    <div class="ex3">
                                 <div class="media">
                                       <div class="media-left media-middle">
-                                        <?php 
-                                        $sql_4 = "SELECT DISTINCT users.profilePic, comments.user_email FROM users JOIN comments ON users.email = comments.user_email WHERE user_email = '$user_email'";
-                                        $result_4 = mysqli_query($db,$sql_4);
-                                        $row_4 = mysqli_fetch_assoc($result_4);
-                                        $image_4 = $row_4['profilePic'];
-                                          echo '<img src="img/profile/'.$image_4.'" class="media-object" style="width:60px">';
-                                        ?>
-                                      </div>
+                                                                             </div>
                                       <div class="media-body">
-                                        <h4 class="media-heading">
                                         <?php
                                          $sql_3 = "SELECT interest_id_comment, user_email, comment_text FROM comments WHERE interest_id_comment = '$int_id'";
                                           $result_3 = $db->query($sql_3);
@@ -336,6 +332,7 @@ input[type=text]:focus {
                                         ?>
                                       </div>
                                 </div>
+                              </div>
                                
 
                          
