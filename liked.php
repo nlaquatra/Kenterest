@@ -185,6 +185,12 @@ input[type=text]:focus {
 #int_text_box {
   padding-top: 3px;
 }
+
+div.ex3 {
+  width: 265px;
+  height: 110px;
+  overflow: auto;
+}
 </style>
 
   

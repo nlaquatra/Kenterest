@@ -182,6 +182,12 @@ input[type=text]:focus {
   padding-top: 3px;
 }
 
+div.ex3 {
+  width: 265px;
+  height: 110px;
+  overflow: auto;
+}
+
 
 </style>
 <nav class="navbar navbar-inverse navbar-fixed-top">
