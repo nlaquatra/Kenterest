@@ -185,3 +185,27 @@ function editProfilePwd($db, $firstName, $lastName, $bio, $pwd, $profilePic) {
     header("location: ../profile.php?success");
     exit();        
 }
+
+function deletePost($db, $postID) {
+    $sql = "DELETE FROM interests WHERE id=$postID";
+    $stmt = mysqli_stmt_init($db);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../check-flags.php?error=stmtFail");
+    }
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+	header("location: ../check-flags.php");
+    exit();
+}
+
+function postOK($db, $postID) {
+    $sql = "UPDATE interests SET flag=0 WHERE id=$postID";
+    $stmt = mysqli_stmt_init($db);
+    if (!mysqli_stmt_prepare($stmt, $sql)) {
+        header("location: ../check-flags.php?error=stmtFail");
+    }
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
+	header("location: ../check-flags.php");
+    exit();
+}
