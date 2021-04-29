@@ -5,10 +5,9 @@ session_start();
 if (!isset($_SESSION["email"])) {
   header ("location: login.php?error=notLogin");
 }
-
 include ('config.php');
+$user_email = $_SESSION['email'];
       
-
 if(isset($_GET['search'])) {
   $searchq = $_GET['search'];
   $searchq = preg_replace("#[^0-9a-z]#i", "", $searchq);
@@ -37,17 +36,25 @@ if(isset($_POST['add_interest'])) {
                 }                      
     }
 }
+
+if(isset($_POST['flag_post'])) {
+  $flag = $_POST['flag_post'];
+  $sql = "UPDATE interests SET flag = '1' WHERE id = '$flag'";
+  $result = $db->query($sql);
+}
+
+if(isset($_POST['comment'])) {
+  $comment = $_POST['comment'];
+  $user_comment = $_POST['comment_text'];
+  $sql = "INSERT INTO comments (user_email, interest_id_comment, comment_text) VALUES ('$user_email', '$comment', '$user_comment')";
+  $result = $db->query($sql);
+}
  
-
-
-
-
-
 ?>
 <!DOCTYPE html>
 <html>
 <head>
-	<title>user-home</title>
+  <title>user-home</title>
   <meta charset="utf-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -203,14 +210,12 @@ input[type=text]:focus {
           <li><a href="profile.php">Your Profile</a></li>
           <li><a href="liked.php">Posts you Like</a></li>
           <li><a href="new-interest.php">Add a New Interest</a></li>
+          <li><a href="logout.php">Logout</a></li>
         </ul>
       </li>
-        <li><a href="#">Trending</a></li>
-
+        <li><a href="trending.php">Trending</a></li>
       </ul>
-       <ul class="nav navbar-nav navbar-right">
-       <li><a href="logout.php">Logout</a></li>
-    </ul>
+       
     <form class="navbar-form navbar-right" action="filter.php" method="get">
           <div class="form-group">
                   <div class="btn-group" role="group" aria-label="Basic example">
@@ -218,6 +223,16 @@ input[type=text]:focus {
                   </div>
                   <div class="btn-group" role="group" aria-label="Basic example">
                     <button type="submit" class="btn btn-danger">Search</button>
+                  </div>
+          </div>
+    </form>
+    <form class="navbar-form navbar-right" action="filter.php" method="get">
+          <div class="form-group">
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <input type="hidden" class="form-control" name="search" placeholder="Search">
+                  </div>
+                  <div class="btn-group" role="group" aria-label="Basic example">
+                    <button type="submit" class="btn btn-default">Show All Interests</button>
                   </div>
           </div>
     </form>
@@ -266,10 +281,12 @@ if(isset($_GET['search'])) {
   $sql = "SELECT * FROM interests WHERE parent LIKE '%$searchq%' OR title LIKE '%$searchq%'" or die("Could not search");
     $result = $db->query($sql);
     if ($result-> num_rows > 0) {
-                while ($row = $result->fetch_assoc()){ ?>
+                while ($row = $result->fetch_assoc()){
+                  $int_id = $row['id']; 
+                 ?>
                   <div class="box"> <!-- //START box -->
                      <!--  //interest image -->
-                       <center><input type="image" id="image_btn" src="images/<?php echo $row['image']; ?>" data-toggle="modal" data-target="#<?php echo$row['id']; ?>">
+                       <center><input type="image" id="image_btn" src="images/<?php echo $row['image']; ?>" data-toggle="modal" data-target="#<?php echo $int_id; ?>">
                        </center>
                           <!-- //interest description -->
                          <p id='int_text_box'><?php echo $row['image_text']; ?></p>
@@ -286,7 +303,7 @@ if(isset($_GET['search'])) {
                   </div> <!-- //END box -->
 
                        <!--  //Modal// -->
-                 <div class="modal fade" id="<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> <!-- //START modal fade -->
+                 <div class="modal fade" id="<?php echo $int_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> <!-- //START modal fade -->
                   <div class="modal-dialog modal-lg" role="document"> <!-- //START modal-dialog -->
                     <div class="modal-content"> <!-- //START modal-content -->
                       <div class="modal-header"> <!-- //START modal-header -->
@@ -305,24 +322,65 @@ if(isset($_GET['search'])) {
                             <h4><?php echo $row['image_text']; ?></h4>
                          
 
-                            <form  method="post" action="liked.php">
-                              <label for="comment-text">Comment: </label>
-                              <input type="text" class="form-group" id="comment-text">
-                                <br>
+                             <!-- FORM FOR USER COMMENTS -->
+                            <form  method="post" action="index.php">
+                                <textarea name="comment_text" class="text" cols="30" rows ="3" placeholder="Comment On This Post" required></textarea><br>
+                                <button class="btn btn-primary" type="submit" name="comment" value="<?php echo $int_id; ?>">Post Comment</button>
                               </form>
-                               
-                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add your comment to this interest" type="submit" name="Post" value="Post">Post</button>
 
-
-                                 <form  method="post" action="liked.php">
-                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Like this Interest" type="submit" name="Like" value="<?php echo $row['id']; ?>">Like <span class="badge"><?php echo $row['likes']; ?></span></button>       
+                                <!-- FORM FOR LIKING A POST -->
+                               <form  method="post" action="liked.php">
+                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Like this Interest" type="submit" name="Like" value="<?php echo $int_id; ?>">Like <span class="badge">
+                                  <?php 
+                                    $sql_2 = "SELECT DISTINCT COUNT(interest_id) AS count FROM likes WHERE interest_id = '$int_id'";
+                                    $result_2 = $db->query($sql_2);
+                                      if ($result_2-> num_rows > 0) {
+                                          while ($row_2 = $result_2->fetch_assoc()){
+                                          $liked_count = $row_2['count'];
+                                          echo $liked_count; 
+                                            $sql_up_likes = "UPDATE interests SET likes = '$liked_count' WHERE id = $int_id";
+                                            $result_up_likes = $db->query($sql_up_likes);
+                                          }
+                                      }
+                                 ?>
+                                </span></button>       
                                 </form>
+
+                                 
+                                    
+                                    <!-- DISPLAY USER COMMENTS -->
+                                <div class="media">
+                                      <div class="media-left media-middle">
+                                        <?php 
+                                        $sql_4 = "SELECT DISTINCT users.profilePic, comments.user_email FROM users JOIN comments ON users.email = comments.user_email WHERE user_email = '$user_email'";
+                                        $result_4 = mysqli_query($db,$sql_4);
+                                        $row_4 = mysqli_fetch_assoc($result_4);
+                                        $image_4 = $row_4['profilePic'];
+                                          echo '<img src="img/profile/'.$image_4.'" class="media-object" style="width:60px">';
+                                        ?>
+                                      </div>
+                                      <div class="media-body">
+                                        <?php
+                                         $sql_3 = "SELECT interest_id_comment, user_email, comment_text FROM comments WHERE interest_id_comment = '$int_id'";
+                                          $result_3 = $db->query($sql_3);
+                                            if ($result_3-> num_rows > 0) {
+                                                while ($row_3 = $result_3->fetch_assoc()){
+                                                  $user_name = $row_3['user_email'];
+                                                  $user_words = $row_3['comment_text'];
+                                                  $short_name = strstr($user_name, '@', true);
+                                                  echo '<h4 class="media-heading">'.$short_name.'</h4>';
+                                                  echo '<p>'.$user_words.'</p>';
+                                                }
+                                            }
+                                        ?>
+                                      </div>
+                                </div>
                                
                             <br>
                             <h4>Category: <?php echo $cap_category; ?></h4>
                               <a href="filter.php?search= <?php echo $row['parent']; ?>"><button class="btn btn-danger" type="submit" name="search" >Check out Other Interests Like this</button></a>
                            <br><br>
-                               <form method="post" action="WCuser-home.php">
+                               <form method="post" action="index.php">
                                   <button class="btn btn-default" type="submit" name="add_interest" value="<?php echo $row['parent']; ?>">Follow This Interest Category</button>
                               </form>
                             </div> <!-- //END 4 div -->
@@ -348,10 +406,12 @@ if(isset($_GET['search'])) {
   $sql = "SELECT * FROM interests WHERE parent LIKE '%$searchq%' OR title LIKE '%$searchq%'" or die("Could not search");
     $result = $db->query($sql);
     if ($result-> num_rows > 0) {
-                while ($row = $result->fetch_assoc()){ ?>
-                  <div class="box"> <!-- //START box -->
+                while ($row = $result->fetch_assoc()){ 
+                   $int_id = $row['id']; 
+                   ?>
+                   <div class="box"> <!-- //START box -->
                      <!--  //interest image -->
-                       <center><input type="image" id="image_btn" src="images/<?php echo $row['image']; ?>" data-toggle="modal" data-target="#<?php echo$row['id']; ?>">
+                       <center><input type="image" id="image_btn" src="images/<?php echo $row['image']; ?>" data-toggle="modal" data-target="#<?php echo $int_id; ?>">
                        </center>
                           <!-- //interest description -->
                          <p id='int_text_box'><?php echo $row['image_text']; ?></p>
@@ -368,7 +428,7 @@ if(isset($_GET['search'])) {
                   </div> <!-- //END box -->
 
                        <!--  //Modal// -->
-                 <div class="modal fade" id="<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> <!-- //START modal fade -->
+                 <div class="modal fade" id="<?php echo $int_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> <!-- //START modal fade -->
                   <div class="modal-dialog modal-lg" role="document"> <!-- //START modal-dialog -->
                     <div class="modal-content"> <!-- //START modal-content -->
                       <div class="modal-header"> <!-- //START modal-header -->
@@ -387,23 +447,65 @@ if(isset($_GET['search'])) {
                             <h4><?php echo $row['image_text']; ?></h4>
                          
 
-                            <form  method="post" action="liked.php">
-                              <label for="comment-text">Comment: </label>
-                              <input type="text" class="form-group" id="comment-text">
-                                <br>
+                             <!-- FORM FOR USER COMMENTS -->
+                            <form  method="post" action="index.php">
+                                <textarea name="comment_text" class="text" cols="30" rows ="3" placeholder="Comment On This Post" required></textarea><br>
+                                <button class="btn btn-primary" type="submit" name="comment" value="<?php echo $int_id; ?>">Post Comment</button>
                               </form>
-                               
-                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add your comment to this interest" type="submit" name="Post" value="Post">Post</button>
-                                <form  method="post" action="liked.php">
-                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Like this Interest" type="submit" name="Like" value="<?php echo $row['id']; ?>">Like</button>    
-                                      
-                            </form>
+
+                                <!-- FORM FOR LIKING A POST -->
+                               <form  method="post" action="liked.php">
+                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Like this Interest" type="submit" name="Like" value="<?php echo $int_id; ?>">Like <span class="badge">
+                                  <?php 
+                                    $sql_2 = "SELECT DISTINCT COUNT(interest_id) AS count FROM likes WHERE interest_id = '$int_id'";
+                                    $result_2 = $db->query($sql_2);
+                                      if ($result_2-> num_rows > 0) {
+                                          while ($row_2 = $result_2->fetch_assoc()){
+                                          $liked_count = $row_2['count'];
+                                          echo $liked_count; 
+                                            $sql_up_likes = "UPDATE interests SET likes = '$liked_count' WHERE id = $int_id";
+                                            $result_up_likes = $db->query($sql_up_likes);
+                                          }
+                                      }
+                                 ?>
+                                </span></button>       
+                                </form>
+
+                                 
+                                    
+                                    <!-- DISPLAY USER COMMENTS -->
+                                <div class="media">
+                                      <div class="media-left media-middle">
+                                        <?php 
+                                        $sql_4 = "SELECT DISTINCT users.profilePic, comments.user_email FROM users JOIN comments ON users.email = comments.user_email WHERE user_email = '$user_email'";
+                                        $result_4 = mysqli_query($db,$sql_4);
+                                        $row_4 = mysqli_fetch_assoc($result_4);
+                                        $image_4 = $row_4['profilePic'];
+                                          echo '<img src="img/profile/'.$image_4.'" class="media-object" style="width:60px">';
+                                        ?>
+                                      </div>
+                                      <div class="media-body">
+                                        <?php
+                                         $sql_3 = "SELECT interest_id_comment, user_email, comment_text FROM comments WHERE interest_id_comment = '$int_id'";
+                                          $result_3 = $db->query($sql_3);
+                                            if ($result_3-> num_rows > 0) {
+                                                while ($row_3 = $result_3->fetch_assoc()){
+                                                  $user_name = $row_3['user_email'];
+                                                  $user_words = $row_3['comment_text'];
+                                                  $short_name = strstr($user_name, '@', true);
+                                                  echo '<h4 class="media-heading">'.$short_name.'</h4>';
+                                                  echo '<p>'.$user_words.'</p>';
+                                                }
+                                            }
+                                        ?>
+                                      </div>
+                                </div>
                                
                             <br>
                             <h4>Category: <?php echo $cap_category; ?></h4>
                               <a href="filter.php?search= <?php echo $row['parent']; ?>"><button class="btn btn-danger" type="submit" name="search" >Check out Other Interests Like this</button></a>
                            <br><br>
-                               <form method="post" action="WCuser-home.php">
+                               <form method="post" action="index.php">
                                   <button class="btn btn-default" type="submit" name="add_interest" value="<?php echo $row['parent']; ?>">Follow This Interest Category</button>
                               </form>
                             </div> <!-- //END 4 div -->

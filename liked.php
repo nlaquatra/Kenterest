@@ -1,13 +1,12 @@
 <?php
 session_start();
-include ('Config.php');
+include ('config.php');
 // makes sure user logs in first
 //prevents typing link in url directly to access
 if (!isset($_SESSION["email"])) {
   header ("location: login.php?error=notLogin");
 }
 $user_email = $_SESSION['email'];
-
 
 if(isset($_POST['add_interest'])) {
   $new_interest = $_POST['add_interest'];
@@ -29,25 +28,24 @@ if(isset($_POST['add_interest'])) {
     }
 }
 
-// if(isset($_POST['Like'])) {
-//   $liked_interest_to_count = $_POST['Like'];
-//   $sql = "SELECT interest_id FROM likes WHERE userid = '$user_email'";
-//   $result = $db->query($sql);
-//   if ($result-> num_rows > 0) {
-//                 while ($row = $result->fetch_assoc()){
-                 
-//                   $existing_interest_id = $row['interest_id'];
-       
-//    if ($liked_interest_to_count != $existing_interest_id) {
-//     echo "Already Liked";
-//    } else {
-            
-         
-//                 $sql = "INSERT INTO likes SET userid = '$user_email', interest_id = '.$liked_interest_to_count.'";
-//                 $result = $db->query($sql);
-//               }
+if(isset($_POST['Like'])){
+  $liked_interest_to_count = $_POST['Like']??NULL;
+                $sql = "INSERT IGNORE INTO likes (userid, interest_id) VALUES ('$user_email','.$liked_interest_to_count.')";
+                $result = $db->query($sql);
+}
 
-// }
+if(isset($_POST['flag_post'])) {
+  $flag = $_POST['flag_post'];
+  $sql = "UPDATE interests SET flag = '1' WHERE id = '$flag'";
+  $result = $db->query($sql);
+}
+
+if(isset($_POST['comment'])) {
+  $comment = $_POST['comment'];
+  $user_comment = $_POST['comment_text'];
+  $sql = "INSERT INTO comments (user_email, interest_id_comment, comment_text) VALUES ('$user_email', '$comment', '$user_comment')";
+  $result = $db->query($sql);
+}
 
 ?>
 <head>
@@ -196,7 +194,7 @@ input[type=text]:focus {
 
       <a class="navbar-brand" href="#">Kenterest</a>
     
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -206,20 +204,18 @@ input[type=text]:focus {
       <ul class="nav navbar-nav">
         <li><a href="index.php">Home</a></li>
         <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="profile.php">Profile
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="profile.php">Your Profile</a></li>
-          <li class="active"><a href="liked.php">Posts you Like</a></li>
+          <li><a href="liked.php">Posts you Like</a></li>
           <li><a href="new-interest.php">Add a New Interest</a></li>
+          <li><a href="logout.php">Logout</a></li>
         </ul>
       </li>
-        <li><a href="#">Trending</a></li>
-
+        <li><a href="trending.php">Trending</a></li>
       </ul>
-       <ul class="nav navbar-nav navbar-right">
-       <li><a href="logout.php">Logout</a></li>
-    </ul>
+     
     <form class="navbar-form navbar-right" action="filter.php" method="get">
           <div class="form-group">
                   <div class="btn-group" role="group" aria-label="Basic example">
@@ -240,12 +236,12 @@ input[type=text]:focus {
     <br>
 
 <body>
-	<br>
-<center><h4>Interests that you Like</h4></center>
+  <br>
+<center><h2>Interests that you Like</h2></center>
 <div class="container">
     <div class="row">
 <?php 
-	if(isset($_POST['UnLike'])){
+  if(isset($_POST['UnLike'])){
     $remove_like = $_POST['UnLike'];
     $sql = "SELECT liked_interests FROM users WHERE email = '$user_email'";
         $result = $db->query($sql);
@@ -263,56 +259,57 @@ input[type=text]:focus {
         $updated_likes =  implode(";", $_SESSION['favorites']);
         $sql = "UPDATE users SET liked_interests = '$updated_likes' WHERE email = '$user_email'";
         $result = $db->query($sql);
+
+        $sql = "DELETE FROM likes WHERE userid = '$user_email' AND interest_id = '$remove_like'";
+        $result = $db->query($sql);
   }
 
 
  $interest_id = $_POST['Like']?? NULL;
  
-			$sql = "SELECT liked_interests FROM users WHERE email = '$user_email'";
-		    $result = $db->query($sql);
-		     	if ($result-> num_rows > 0) {
-		                while ($row = $result->fetch_assoc()){
-		                $prep_csv = $row['liked_interests']; 
-						$d_file = explode(";", $prep_csv);
-						$_SESSION['favorites'] = $d_file;
-						}
-					}
-				else  {
-				$fav_array = array();
-				$_SESSION['favorites'] = $fav_array;
-				}
-        
-	        array_push($_SESSION['favorites'], $interest_id);
-
-	        $clean_array = array_unique($_SESSION['favorites']);
-
-          if (($key = array_search($interest_id, $clean_array) !== false)) {
-        		  $sql = "UPDATE interests SET likes = likes +1 WHERE id = '$interest_id'";
-              $result = $db->query($sql);
+      $sql = "SELECT liked_interests FROM users WHERE email = '$user_email'";
+        $result = $db->query($sql);
+          if ($result-> num_rows > 0) {
+                    while ($row = $result->fetch_assoc()){
+                    $prep_csv = $row['liked_interests']; 
+            $d_file = explode(";", $prep_csv);
+            $_SESSION['favorites'] = $d_file;
+            }
           }
+        else  {
+        $fav_array = array();
+        $_SESSION['favorites'] = $fav_array;
+        }
+        
+          array_push($_SESSION['favorites'], $interest_id);
 
-			$delimited_likes =  implode(";", $clean_array);
-		    $sql = "UPDATE users SET liked_interests = '$delimited_likes' WHERE email = '$user_email'";
-		    $result = $db->query($sql);
+          $clean_array = array_unique($_SESSION['favorites']);
 
 
-		    $sql = "SELECT liked_interests FROM users WHERE email = '$user_email'";
-		    $result = $db->query($sql);
-	     	if ($result-> num_rows > 0) {
-	                while ($row = $result->fetch_assoc()){
-	                $prep_csv = $row['liked_interests'];
-	                  
-					$d_file = explode(";", $prep_csv);
-					// echo '<br>';
-					// print_r($d_file);
-			  foreach($d_file as $interest_title) {
-			    $sql = "SELECT id, image_text, parent, title, image  FROM interests WHERE id = '$interest_title'";
-			    $result = $db->query($sql);
-			   	 if ($result-> num_rows > 0) {
-			                 while ($row = $result->fetch_assoc()){ ?>
+      $delimited_likes =  implode(";", $clean_array);
+        $sql = "UPDATE users SET liked_interests = '$delimited_likes' WHERE email = '$user_email'";
+        $result = $db->query($sql);
+
+
+        $sql = "SELECT liked_interests FROM users WHERE email = '$user_email'";
+        $result = $db->query($sql);
+        if ($result-> num_rows > 0) {
+                  while ($row = $result->fetch_assoc()){
+                  $prep_csv = $row['liked_interests'];
+                    
+          $d_file = explode(";", $prep_csv);
+          // echo '<br>';
+          // print_r($d_file);
+        foreach($d_file as $interest_title) {
+          $sql = "SELECT id, image_text, parent, title, image, likes  FROM interests WHERE id = '$interest_title'";
+          $result = $db->query($sql);
+           if ($result-> num_rows > 0) {
+                       while ($row = $result->fetch_assoc()){ 
+                        $int_id = $row['id'];
+                        ?>
                   <div class="box"> <!-- //START box -->
                      <!--  //interest image -->
-                       <center><input type="image" id="image_btn" src="images/<?php echo $row['image']; ?>" data-toggle="modal" data-target="#<?php echo$row['id']; ?>">
+                       <center><input type="image" id="image_btn" src="images/<?php echo $row['image']; ?>" data-toggle="modal" data-target="#<?php echo $int_id; ?>">
                        </center>
                           <!-- //interest description -->
                          <p id='int_text_box'><?php echo $row['image_text']; ?></p>
@@ -329,7 +326,7 @@ input[type=text]:focus {
                   </div> <!-- //END box -->
 
                        <!--  //Modal// -->
-                 <div class="modal fade" id="<?php echo $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> <!-- //START modal fade -->
+                 <div class="modal fade" id="<?php echo  $int_id; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"> <!-- //START modal fade -->
                   <div class="modal-dialog modal-lg" role="document"> <!-- //START modal-dialog -->
                     <div class="modal-content"> <!-- //START modal-content -->
                       <div class="modal-header"> <!-- //START modal-header -->
@@ -348,23 +345,65 @@ input[type=text]:focus {
                             <h4><?php echo $row['image_text']; ?></h4>
                          
 
+                            <!-- FORM FOR USER COMMENTS -->
                             <form  method="post" action="liked.php">
-                              <label for="comment-text">Comment: </label>
-                              <input type="text" class="form-group" id="comment-text">
-                                <br>
+                                <textarea name="comment_text" class="text" cols="30" rows ="3" placeholder="Comment On This Post" required></textarea><br>
+                                <button class="btn btn-primary" type="submit" name="comment" value="<?php echo $int_id; ?>">Post Comment</button>
                               </form>
-                               
-                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Add your comment to this interest" type="submit" name="Post" value="Post">Post</button>
-                                <form  method="post" action="liked.php">
-                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Remove this Interest from Likes" type="submit" name="UnLike" value="<?php echo $row['id']; ?>">Remove From Likes</button>    
-                                       
-                            </form>
+
+                                  <!-- FORM FOR LIKING A POST -->
+                               <form  method="post" action="liked.php">
+                                <button class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Remove from Likes" type="submit" name="UnLike" value="<?php echo $int_id; ?>">Remove from Likes <span class="badge">
+                                  <?php 
+                                    $sql_2 = "SELECT DISTINCT COUNT(interest_id) AS count FROM likes WHERE interest_id = '$int_id'";
+                                    $result_2 = $db->query($sql_2);
+                                      if ($result_2-> num_rows > 0) {
+                                          while ($row_2 = $result_2->fetch_assoc()){
+                                          $liked_count = $row_2['count'];
+                                          echo $liked_count; 
+                                            $sql_up_likes = "UPDATE interests SET likes = '$liked_count' WHERE id = $int_id";
+                                            $result_up_likes = $db->query($sql_up_likes);
+                                          }
+                                      }
+                                 ?>
+                                </span></button>       
+                                </form>
+
+                                 
+                                    
+                                    <!-- DISPLAY USER COMMENTS -->
+                                <div class="media">
+                                      <div class="media-left media-middle">
+                                        <?php 
+                                        $sql_4 = "SELECT DISTINCT users.profilePic, comments.user_email FROM users JOIN comments ON users.email = comments.user_email WHERE user_email = '$user_email'";
+                                        $result_4 = mysqli_query($db,$sql_4);
+                                        $row_4 = mysqli_fetch_assoc($result_4);
+                                        $image_4 = $row_4['profilePic'];
+                                          echo '<img src="img/profile/'.$image_4.'" class="media-object" style="width:60px">';
+                                        ?>
+                                      </div>
+                                      <div class="media-body">
+                                        <?php
+                                         $sql_3 = "SELECT interest_id_comment, user_email, comment_text FROM comments WHERE interest_id_comment = '$int_id'";
+                                          $result_3 = $db->query($sql_3);
+                                            if ($result_3-> num_rows > 0) {
+                                                while ($row_3 = $result_3->fetch_assoc()){
+                                                  $user_name = $row_3['user_email'];
+                                                  $user_words = $row_3['comment_text'];
+                                                  $short_name = strstr($user_name, '@', true);
+                                                  echo '<h4 class="media-heading">'.$short_name.'</h4>';
+                                                  echo '<p>'.$user_words.'</p>';
+                                                }
+                                            }
+                                        ?>
+                                      </div>
+                                </div>
                                
                             <br>
                             <h4>Category: <?php echo $cap_category; ?></h4>
                               <a href="filter.php?search= <?php echo $row['parent']; ?>"><button class="btn btn-danger" type="submit" name="search" >Check out Other Interests Like this</button></a>
                               <br><br>
-                               <form method="post" action="WCuser-home.php">
+                               <form method="post" action="index.php">
                                   <button class="btn btn-default" type="submit" name="add_interest" value="<?php echo $row['parent']; ?>">Follow This Interest Category</button>
                               </form>
                           
@@ -380,10 +419,10 @@ input[type=text]:focus {
                   </div> <!-- //END modal-dialog -->
                 </div> <!-- //END modal fade -->
 <?php 
-			            }
-			        }
-			    }
-			}
+                  }
+              }
+          }
+      }
 }
 
 
@@ -395,8 +434,8 @@ input[type=text]:focus {
 
 
 
-	    ?>
-	</div>
+      ?>
+  </div>
 </div>
 </body>
 <!-- <?php include'footer.php'; ?>  -->

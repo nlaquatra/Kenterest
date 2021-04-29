@@ -36,29 +36,6 @@ if(isset($_POST['add_interest'])) {
     }
 }
 
-if(isset($_POST['remove_interest'])){
-    $remove_followed_interest = $_POST['remove_interest'];
-    $sql = "SELECT followed_interest FROM users WHERE email = '$user_email'";
-        $result = $db->query($sql);
-          if ($result-> num_rows > 0) {
-                    while ($row = $result->fetch_assoc()){
-                    $prep_csv = $row['followed_interest']; 
-                    $d_file = explode(";", $prep_csv);
-                    echo '<br>';
-                    $existing_interest_array = array();
-                    $existing_interest_array = $d_file;  
-                    if (($key = array_search($remove_followed_interest, $existing_interest_array)) !== false) {
-                            array_splice($existing_interest_array, $key,1 );
-                        }  
-                        $updated_interest_array =  implode(";", $existing_interest_array);
-
-          }
-          $updated_interest_array =  implode(";", $existing_interest_array);
-          $sql = "UPDATE users SET followed_interest = '$updated_interest_array' WHERE email = '$user_email'";
-          $result = $db->query($sql);
-  }
-}
-
 if(isset($_POST['flag_post'])) {
   $flag = $_POST['flag_post'];
   $sql = "UPDATE interests SET flag = '1' WHERE id = '$flag'";
@@ -71,7 +48,6 @@ if(isset($_POST['comment'])) {
   $sql = "INSERT INTO comments (user_email, interest_id_comment, comment_text) VALUES ('$user_email', '$comment', '$user_comment')";
   $result = $db->query($sql);
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -208,31 +184,6 @@ input[type=text]:focus {
 
 
 </style>
-
-         <!--    <nav class="navbar navbar-inverse navbar-fixed-top col-lg-12 col-md-12 col-sm-12 col-xs-12">
-              <div class="container-fluid">
-                <ul class="nav navbar-nav">
-                  <li class="active"><a href="#">Home</a></li>
-                  <li><a href="#">Trending</a></li>
-                 
-                </ul>
-                <form class="navbar-form navbar-right" action="filter.php" method="get">
-                  <div class="form-group">
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                    <input type="text" class="form-control" name="search" placeholder="Search" required>
-                  </div>
-                  <div class="btn-group" role="group" aria-label="Basic example">
-                  <button type="submit" class="btn btn-danger">Search</button>
-                </div>
-                </div>
-                </form>
-                <div class="navbar-form navbar-right" role="group" aria-label="Basic example">
-                  <button type="submit" class="btn btn-danger"><span class="glyphicon glyphicon-user"></span></button>
-                </div>
-            
-              </div>
-            </nav> -->
-
 <nav class="navbar navbar-inverse navbar-fixed-top">
   <div class="container-fluid">
     <div class="navbar-header">
@@ -247,7 +198,7 @@ input[type=text]:focus {
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="index.php">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
         <span class="caret"></span></a>
@@ -258,7 +209,7 @@ input[type=text]:focus {
           <li><a href="logout.php">Logout</a></li>
         </ul>
       </li>
-        <li><a href="trending.php">Trending</a></li>
+        <li class="active"><a href="trending.php">Trending</a></li>
       </ul>
      
     <form class="navbar-form navbar-right" action="filter.php" method="get">
@@ -276,33 +227,22 @@ input[type=text]:focus {
 
   </div>
 </nav>
-
-
-
-
 <body>
 
   <!--endnavbar-->
   <br><br>
-<center><h2>Interests that you follow</h2></center>
+<center><h2>Most Popular Posts From Users</h2></center>
 <div class="container"><!--beginning of container-->
   
     <div class="row">   
       
 <?php
 
-if(isset($user_email)) {
-  $sql = "SELECT followed_interest FROM users WHERE email = '" . $user_email . "'";
-  $result = $db->query($sql);
-   if ($result-> num_rows > 0) {
-                while ($row = $result->fetch_assoc()){
-                  $prep_csv = $row['followed_interest'];
-                  
-  $d_file = explode(";", $prep_csv);
-  // print_r($d_file);
-  foreach($d_file as $following) {
-    $sql = "SELECT id, image_text, parent, title, image FROM interests WHERE parent = '$following' ORDER BY title ASC";
-    $result = $db->query($sql);                 
+
+
+
+ $sql = "SELECT id, image_text, parent, title, image FROM interests WHERE likes >= '1' ORDER BY Date ASC";
+ $result = $db->query($sql);                 
     if ($result-> num_rows > 0) {
                 while ($row = $result->fetch_assoc()){
                 $int_id = $row['id']; 
@@ -346,7 +286,7 @@ if(isset($user_email)) {
 
 
                             <!-- FORM FOR USER COMMENTS -->
-                            <form  method="post" action="index.php">
+                            <form  method="post" action="trending.php">
                                 <textarea name="comment_text" class="text" cols="30" rows ="3" placeholder="Comment On This Post" required></textarea><br>
                                 <button class="btn btn-primary" type="submit" name="comment" value="<?php echo $int_id; ?>">Post Comment</button>
                               </form>
@@ -361,16 +301,13 @@ if(isset($user_email)) {
                                           while ($row_2 = $result_2->fetch_assoc()){
                                           $liked_count = $row_2['count'];
                                           echo $liked_count; 
-                                            $sql_up_likes = "UPDATE interests SET likes = '$liked_count' WHERE id = $int_id";
-                                            $result_up_likes = $db->query($sql_up_likes);
                                           }
                                       }
                                  ?>
                                 </span></button>       
                                 </form>
 
-                                 
-                                    
+
                                     <!-- DISPLAY USER COMMENTS -->
                                 <div class="media">
                                       <div class="media-left media-middle">
@@ -383,6 +320,7 @@ if(isset($user_email)) {
                                         ?>
                                       </div>
                                       <div class="media-body">
+                                        <h4 class="media-heading">
                                         <?php
                                          $sql_3 = "SELECT interest_id_comment, user_email, comment_text FROM comments WHERE interest_id_comment = '$int_id'";
                                           $result_3 = $db->query($sql_3);
@@ -398,16 +336,16 @@ if(isset($user_email)) {
                                         ?>
                                       </div>
                                 </div>
-                             
-
                                
 
-                            <br>
-                            <h4>Category: <?php echo $cap_category; ?></h4>
+                         
                              
                               <br>
-                              <form method="post" action="index.php">
-                                  <button class="btn btn-default" type="submit" name="remove_interest" value="<?php echo $row['parent']; ?>">Stop Following This Interest Category</button>
+                             <h4>Category: <?php echo $cap_category; ?></h4>
+                              <a href="filter.php?search= <?php echo $row['parent']; ?>"><button class="btn btn-danger" type="submit" name="search" >Check out Other Interests Like this</button></a>
+                              <br><br>
+                               <form method="post" action="index.php">
+                                  <button class="btn btn-default" type="submit" name="add_interest" value="<?php echo $row['parent']; ?>">Follow This Interest Category</button>
                               </form>
                           
                             </div> <!-- //END 4 div -->
@@ -432,13 +370,11 @@ if(isset($user_email)) {
 <?php 
               }
           }
-      }
-    } 
-  }
-}
+   
 ?>  
     </div>
       <!-- ends container -->
 </div>
 </body>
 </html>
+
