@@ -1,6 +1,6 @@
 <?php
 // Include config file
-require_once "Config.php";
+require_once "config.php";
 ?>
 <!doctype html>
 <html lang="en">

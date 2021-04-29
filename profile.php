@@ -1,7 +1,6 @@
 <?php
 include_once("header.php");
-include_once("Config.php");
-include_once("config.php");
+//include_once("config.php");
 $userID = $_SESSION["userID"];
 /*
 
@@ -42,17 +41,21 @@ if(isset($_POST['upload'])) {
 
 if (isset($_GET["error"])) {
     if ($_GET["error"] === "uploadError") {
-      echo "<div class = \"alert alert-warning\"><center><strong>Warning:</strong> Somthing went wrong while uploading!</center></div>";
+      echo "<div class = \"alert alert-warning alert-dismissible fade show\" role=\"alert\"><center><strong>Warning:</strong> Somthing went wrong while uploading!</center>
+      <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>";
     }
     if ($_GET["error"] === "emptyInput") {
-        echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> All fields required when editing profile!</center></div>";
+        echo "<div class = \"alert alert-danger alert-dismissible fade show\" role=\"alert\"><center><strong>Error:</strong> All fields required when editing profile!</center>
+        <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>";
       }
     if ($_GET["error"] === "invalidPwd") {
-        echo "<div class = \"alert alert-danger\"><center><strong>Error:</strong> The passwords do not match!</center></div>";
+        echo "<div class = \"alert alert-danger alert-dismissible fade show\" role=\"alert\"><center><strong>Error:</strong> The passwords do not match!</center>
+        <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>";
     }
 }
 else if (isset($_GET["success"])) {
-    echo "<div class = \"alert alert-success\"><center><strong>Success:</strong> You have updated your info!</center></div>";
+    echo "<div class = \"alert alert-success alert-dismissible fade show\" role=\"alert\"><center><strong>Success:</strong> You have updated your info!</center>
+    <button type=\"button\" class=\"btn-close\" data-bs-dismiss=\"alert\" aria-label=\"Close\"></button></div>";
 }
 
 ?>
@@ -80,7 +83,7 @@ else if (isset($_GET["success"])) {
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <div class="profile-head">
+                        <div class="profile-head text-center">
                                     <h5>
                                         Welcome: <?php echo $row["firstName"]; ?>
                                     </h5>
@@ -144,7 +147,8 @@ else if (isset($_GET["success"])) {
                             </form> -->
                             <p>Useful Links</p>
                             <a href="index.php">Home</a><br/>
-                            <a href="post.php">Post</a><br/>
+                            <a href="liked.php">Liked Interest</a><br/>
+                            <a href="new-interest.php">Post Interest</a></br>
                             <a href="includes/logout.inc.php">Logout</a><br/>
                         </div>
                     </div>

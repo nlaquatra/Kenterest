@@ -6,7 +6,7 @@ if (!isset($_SESSION["email"])) {
   header ("location: login.php?error=notLogin");
 }
 
-include ('Config.php');
+include ('config.php');
       
 
 if(isset($_GET['search'])) {
@@ -195,7 +195,7 @@ input[type=text]:focus {
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="WCuser-home.php">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li class="dropdown">
         <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
         <span class="caret"></span></a>

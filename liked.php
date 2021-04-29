@@ -204,9 +204,9 @@ input[type=text]:focus {
     </div>
     <div class="collapse navbar-collapse" id="myNavbar">
       <ul class="nav navbar-nav">
-        <li><a href="WCuser-home.php">Home</a></li>
+        <li><a href="index.php">Home</a></li>
         <li class="dropdown">
-        <a class="dropdown-toggle" data-toggle="dropdown" href="#">Profile
+        <a class="dropdown-toggle" data-toggle="dropdown" href="profile.php">Profile
         <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="profile.php">Your Profile</a></li>
