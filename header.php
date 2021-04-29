@@ -66,8 +66,9 @@ if(isset($_POST['submit'])) {
           <ul class="dropdown-menu" aria-labelledby="navbarScrollingDropdown">
             <li><a class="dropdown-item" href="profile.php">View Profile</a></li>
             <li><a class="dropdown-item" href="liked.php">Liked Posts</a></li>
-            <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href="new-interest.php">Post Interest</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="logout.php">Logout</a></li>
           </ul>
         </li>
         <li class="nav-item">
