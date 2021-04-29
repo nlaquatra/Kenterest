@@ -8,12 +8,12 @@
 <div class="container"><!--beginning of container-->
     <div class="row">    
               <?php
-                     $sql = "SELECT id, firstName, lastName, email, profilePic, UserType, Status FROM users ORDER BY lastname";
+                     $sql = "SELECT userID, firstName, lastName, email, profilePic, UserType, Status FROM users ORDER BY lastName";
                      $result = mysqli_query($db,$sql);
 
                   if ($result->num_rows > 0) {
                         while ($row = mysqli_fetch_array($result)){
-                          echo '<form method="post" id="sectionForm" action="includes/modUsers.inc.php">';
+                          echo '<form method="post" userID="sectionForm" action="includes/modUsers.inc.php">';
                           echo '<div class="box">';	  
 						  
 						  if($row['profilePic'] != NULL){
@@ -27,15 +27,15 @@
 						  echo "<p>".$row['email']."</p>";
 						
 						if($row['UserType']==0){
-							echo "<p><button type='submit' name='userType' value=".$row['id'].">Upgrade Account</button></p>";
+							echo "<p><button type='submit' name='userType' value=".$row['userID'].">Upgrade Account</button></p>";
 						} else {
-							echo "<p><button type='submit' name='userType' value=".$row['id'].">Downgrade Account</button></p>";
+							echo "<p><button type='submit' name='userType' value=".$row['userID'].">Downgrade Account</button></p>";
 						}
 						  
 						if($row['Status']==0){
-							echo "<p><button type='submit' name='status' value=".$row['id'].">Block User</button></p>";
+							echo "<p><button type='submit' name='status' value=".$row['userID'].">Block User</button></p>";
 						} else {
-							echo "<p><button type='submit' name='status' value=".$row['id'].">Unblock User</button></p>";
+							echo "<p><button type='submit' name='status' value=".$row['userID'].">Unblock User</button></p>";
 						}
 
                         echo '</div>';
@@ -54,7 +54,7 @@
 
 
 
-<link href="css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<link href="css/bootstrap.min.css" rel="stylesheet" userID="bootstrap-css">
 <link rel='stylesheet' type='text/css' media='screen' href='css/custom.css'>
 <script src="js/bootstrap.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
