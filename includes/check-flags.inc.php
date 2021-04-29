@@ -1,5 +1,5 @@
 <?php
-require_once("../Config.php");
+require_once("../config.php");
 require_once("functions.inc.php");
 
 if (isset($_POST['delete'])) {
