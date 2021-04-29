@@ -72,7 +72,7 @@ if(isset($_POST['submit'])) {
           </ul>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Trending</a>
+          <a class="nav-link" href="trending.php" tabindex="-1" aria-disabled="true">Trending</a>
         </li>
         <li class="nav-item" style="margin-left: 15px;">
           <a class="nav-link btn btn-danger btn-sm" type="button" style="color: white;"aria-current="page" href="logout.php">Logout</a>
