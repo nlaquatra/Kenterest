@@ -2,7 +2,7 @@
 
 function emptyInputRegister($firstName, $lastName, $email, $pwd, $pwd_repeat) {
     $result; //bool return val
-    if (empty($firstName) || empty($lastName) || empty($email) || empty($pwd) || empty($pwd_repeat)) {
+    if (empty($firstName) || empty($lastName) || empty($email) || empty($pwd) || empty($pwd_repeat)) { //checks to see if inputs are empty
         $result = true;
     }
     else {
@@ -13,7 +13,7 @@ function emptyInputRegister($firstName, $lastName, $email, $pwd, $pwd_repeat) {
 
 function emptyInputPost($title, $parent, $image, $image_text) {
     $result; //bool return val
-    if (empty($title) || empty($parent) || empty($image) || empty($image_text)) {
+    if (empty($title) || empty($parent) || empty($image) || empty($image_text)) { //check if fields are empty 
         $result = true;
     }
     else {
@@ -38,7 +38,7 @@ function invalidEmail($email) {
     
     $suffix = strtolower(substr($email,-9));
     
-    if ($suffix !== '@kent.edu') {
+    if ($suffix !== '@kent.edu') { //checks for @kent.edu address
         $result = true;
     }
     else {
